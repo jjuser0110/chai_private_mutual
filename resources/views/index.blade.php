@@ -1,24 +1,6 @@
 @extends('layouts.app')
 
 @section('header_css')
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="{{ asset('css/swiper.css') }}"/>
-<style>
-    #profile-info{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-    }
-
-    #profile-info .name{
-        font-weight: 600;
-    }
-
-    #profile-info .bank{
-        font-size: 12px;
-    }
-</style> -->
 @endsection
 
 @section('content')
@@ -29,13 +11,13 @@
 </div>
 <div id="page-content">
     <!-- SLIDERS -->
-    <div class="swiper-container swiper" id="home-banner">
+    <div class="swiper-container swiper hero-swiper" id="home-banner">
         <div class="swiper-wrapper">
             <!-- <div class="swiper-slide"><img src="{{ asset('img/sliders/slide8.webp') }}" alt="Jamesbond777"></div> -->
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/01.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/02.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/03.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/04.jpg') }}')"></div></div>
+            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/01.jpg') }}')"></div></div>
+            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/02.jpg') }}')"></div></div>
+            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/03.jpg') }}')"></div></div>
+            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/04.jpg') }}')"></div></div>
         
         </div>
         <div class="swiper-pagination"></div>

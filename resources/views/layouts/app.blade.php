@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		@if(!env('APP_LOCAL', false))
-		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+		<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
 		@endif
 		@include('layouts.css')
 		<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">

@@ -53,14 +53,19 @@
 	 function loadPage(path){
         //showLoading();
         $.ajax({
-            url: "/"+path,
+            url: path,
             type: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
             success: function (response) {
                 //$('#navi-menu .menu-item').removeClass('active');
 				if(response.success == true){
-					$('#content').html();
+          $('#content').fadeOut(200, function () {
+                    $(this).html(response.content).fadeIn(200);
+                });
             
-			window.history.pushState({}, '', '/'+path); 
+			window.history.pushState({}, '', path); 
 				
 				}
 				else{

@@ -104,6 +104,27 @@ border-radius: 0.375rem;
 }
 
 
+
+
+.list-group{
+display: flex
+;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    border-radius: 0.375rem;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #212529;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
 #main-wrapper {
     margin: 0 auto;
     position: relative;
@@ -144,8 +165,10 @@ position: fixed;
 ;
     align-items: center;
     justify-content: center;
-
+    font-size: 1rem
 }
+
+
 
 #header .logo {
     width: 37px;
@@ -159,6 +182,7 @@ position: fixed;
     width: 100%;
 	height: 100%
 }
+
 
 	#page-content {
     padding-top: 58px;
@@ -203,28 +227,28 @@ position: fixed;
     display: block
 }
 
-#home-banner{
+.hero-swiper{
 	margin: auto;
 	width: calc(100% - 22px)
 }
 
 
 
-#home-banner .swiper-slide .image {
+.hero-swiper .swiper-slide .image {
     width: 100%;
     padding-bottom: 45%;
     background-size: cover;
     background-position: 50%;
 }
 
-#home-banner .swiper-pagination-bullet{
+.hero-swiper .swiper-pagination-bullet{
 	background: black;
 	border-radius: 0;
 	width: 12px;
 	height: 4px
 }
 
-#home-banner .swiper-pagination-bullet:hover{
+.hero-swiper .swiper-pagination-bullet:hover{
 	background: black !important;
 }
 
@@ -415,20 +439,15 @@ margin: 0
     padding: 0;
     border-radius: 3px;
     overflow: visible;
-}
-.project-wrapper .card .progress  {
     background-color: #cfe2ff !important;
 }
 
 
-
 .project-wrapper .card .progress-bar {
     position: relative;
-    
     border-radius: 3px;
     overflow: visible
 }
-
 
 
 .project-wrapper .card .progress-bar .label{
@@ -453,6 +472,145 @@ margin: 0
     left: 50%;
     transform: translateX(-50%);
 }
+
+
+
+
+.project-category-tabs .list-group {
+    background: none;
+    flex-direction: row
+}
+
+.project-category-tabs .list-group .list-group-item {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 18px 0 25px;
+    font-size: .75rem;
+    font-weight: 400;
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project-category-tabs .list-group .list-group-item .icon {
+    width: 49px;
+    height: 49px;
+    margin-bottom: 7px;
+}
+
+.project-category-tabs .list-group .list-group-item .icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.project-category-tabs .list-group .list-group-item .label {
+    color: #fff;
+}
+
+.project-list-view .list-group {
+    background: none;
+}
+
+.project-list-view .list-group .list-group-item {
+    background: none;
+    border: none;
+    color: #fff;
+    background: #24262b;
+}
+
+.project-list-view .list-group .project-item{
+    align-items: center !important;
+    display: flex !important
+}
+
+.project-list-view .list-group .list-group-item .thumbnail-wrapper .thumbnail {
+    width: 85px;
+    height: 85px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: 50%;
+}
+
+.project-list-view .list-group .list-group-item .project-info {
+    padding-left: 10px;
+    flex: 1;
+}
+
+.project-list-view .list-group .list-group-item .project-info .project-name {
+    width: 100%;
+    font-size: .875rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-wrap: wrap;
+    text-transform: capitalize;
+}
+
+.project-list-view .list-group .list-group-item .project-info .project-details {
+    font-size: .625rem;
+    font-weight: 400;
+    color: #838a8d;
+    text-transform: capitalize;
+}
+
+.project-list-view .list-group .list-group-item .project-min-invest {
+    font-size: .875rem;
+    text-wrap: nowrap;
+}
+
+
+
+.project-list-view .list-group .list-group-item .progress .label {
+    overflow: visible;
+}
+.project-list-view .list-group .list-group-item .progress  {
+    width: 155px;
+    margin: 25px 0 0;
+    height: 3px;
+    padding: 0;
+    border-radius: 3px;
+    overflow: visible;
+    background-color: #cfe2ff !important;
+}
+
+
+.project-list-view .list-group .list-group-item .progress-bar {
+    position: relative;
+    border-radius: 3px;
+    overflow: visible
+}
+
+
+.project-list-view .list-group .list-group-item .progress-bar .label{
+    position: absolute;
+    top: -20px;
+    right: -14px;
+    background-color: #0072ff;
+    color: #fff;
+    display: inline-block;
+    line-height: 13px;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-size: .625rem;
+}
+
+.project-list-view .list-group .list-group-item .progress-bar .label:after{
+    content: "";
+    position: absolute;
+    border: 4px solid transparent;
+    border-top-color: #0072ff;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
 
 @media only screen and (min-width: 992px) {
     #main-wrapper {

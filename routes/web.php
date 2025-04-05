@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
+Route::get('/home', [App\Http\Controllers\Controller::class, 'index'])->name('index');
+Route::get('/join', [App\Http\Controllers\Controller::class, 'join'])->name('join');
+Route::get('/shop', [App\Http\Controllers\Controller::class, 'shop'])->name('shop');
 // Route::get('/history', [App\Http\Controllers\HomeController::class, 'history'])->name('history')->middleware('auth');
 // Route::get('/bonus', [App\Http\Controllers\HomeController::class, 'bonus'])->name('bonus');
 // Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile')->middleware('auth');
