@@ -1,0 +1,27 @@
+#history .toggle-options{
+    display: flex;
+    gap: 5px;
+    margin: 10px -10px;
+    padding: 0 10px;
+}
+
+#history .toggle-option{
+    background: #3b3b3b;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+#history .toggle-option.active{
+    color: var(--clr-primary);
+    background: #000;
+    font-weight: 600;
+}
+
+.note{
+    font-size: 13px;
+    text-align: center;
+    margin: 5px 0;
+}
