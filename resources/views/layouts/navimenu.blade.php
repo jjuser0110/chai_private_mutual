@@ -11,7 +11,7 @@
 		<i class="ri-xl ri-shopping-bag-line"></i>
 		<label>Shop</label>
 	</a>
-	<a id="my-icon" class="menu-item">
+	<a id="account-icon" class="menu-item" onclick="openModal('modal-login')">
 		<i class="ri-xl ri-account-circle-line"></i>
 		<label>My</label>
 	</a>

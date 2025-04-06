@@ -1,16 +1,12 @@
 @extends('layouts.app')
 
-@section('header_css')
-@endsection
-
 @section('content')
 <div id="header">
     <div class="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo" height="20"></div>
-
     <a target="_blank" class="customer-service" href="#"><i class="ri-customer-service-2-line ri-xl"></i></a>
 </div>
 <div id="page-content">
-    <!-- SLIDERS -->
+    <!-- Slider -->
     <div class="swiper-container swiper hero-swiper" id="home-banner">
         <div class="swiper-wrapper">
             <!-- <div class="swiper-slide"><img src="{{ asset('img/sliders/slide8.webp') }}" alt="Jamesbond777"></div> -->
@@ -21,35 +17,28 @@
         
         </div>
         <div class="swiper-pagination"></div>
-        <!--<div class="swiper-scrollbar"></div>-->
     </div>
 
+    <!-- Notice -->
     <div id="notice-slider">
         <div class="notice-icon">
             <i class="ri-volume-down-line"></i>
         </div>
-    
+
         <div class="swiper-container swiper" id="swiper-notice">
             <div class="swiper-wrapper">
                 <div class="swiper-slide"><span>Welcome to Hong Leong Mutual Asia</span></div>
                 <div class="swiper-slide"><span>Welcome to Hong Leong Mutual Asia</span></div>
-        
             </div>
-      
         </div>
-
-       
     </div>
 
+    <!-- Menu -->
     <div id="content-menu">
         <a href="#" class="item"><div class="icon"><i class="ri-newspaper-line"></i></div><span>News</span></a>
         <a href="#" class="item"><div class="icon"><i class="ri-menu-line"></i></div><span>Join</span></a>
         <a href="#" class="item"><div class="icon"><i class="ri-wallet-fill"></i></div><span>Withdraw</span></a>
         <a href="#" class="item"><div class="icon"><i class="ri-customer-service-line"></i></div><span>Customer Service</span></a>
-
-
-
-
     </div>
 
     <div class="divider"></div>
@@ -216,80 +205,32 @@
     </div>
 
     <div class="divider"></div>
-
-
 </div>
-
-<div id="footer">
-    @include('layouts.navimenu')
-</div>
-@endsection
-@section('extra')
-<!--
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="content">
-            <div id="apk-game-info">
-                <img id="game_info_image">
-                <div class="account-info">
-                    <div class="top">Game Account</div>
-               
-                    <div class="row copy-content">
-                        <div class="col-left">
-                            <label>Username</label>
-                            <div class="value copy-value" id="game_info_username"></div>
-                        </div>
-                        <div class="btn-copy">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path><path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="row copy-content">
-                        <div class="col-left">
-                            <label>Password</label>
-                            <div class="value copy-value" id="game_info_pass"></div>
-                        </div>
-                        <div class="btn-copy">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path><path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="action-wrapper">
-                    <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
-                    <button class="btn btn-primary" id="play_now">Play Now</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
--->
-
-
-
 @endsection
 @section('custom')
 <script>
-var swiper = new Swiper('#home-banner', {
+    new Swiper('#home-banner', {
         loop: true,
         autoplay: {
-            delay: 5000, // 5 seconds per slide
+            delay: 5000,
             disableOnInteraction: false,
         },
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
-        }
+        },
+        slidesPerView: 1,
+        spaceBetween: 2,
     });
 
     new Swiper('#swiper-notice', {
         loop: true,
         autoplay: {
-            delay: 5000, // 5 seconds per slide
+            delay: 5000,
             disableOnInteraction: false,
         },
+        slidesPerView: 1,
+        spaceBetween: 2,
     });
     $('.menu-item').removeClass('active');
     $('#home-icon').addClass('active');

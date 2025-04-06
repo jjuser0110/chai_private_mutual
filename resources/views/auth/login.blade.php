@@ -1,52 +1,63 @@
 @extends('layouts.app')
 
-@section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<style>
-	#forgotpassword{
-		margin-top: -15px;
-		font-size: 12px;
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 15px;
-		color: white;
-	}
-
-	.text-danger{
-		color:#fa6969;
-		font-size:0.8em;
-	}
-</style>
-@endsection
-
 @section('content')
-<div class="box">
-	<div class="section bg-transparent ds">
-		<div class="bg-dark ds section-header">
-			<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-shield"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 21v-2a4 4 0 0 1 4 -4h2" /><path d="M22 16c0 4 -2.5 6 -3.5 6s-3.5 -2 -3.5 -6c1 0 2.5 -.5 3.5 -1.5c1 1 2.5 1.5 3.5 1.5z" /><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /></svg>
-			<label>SIGN IN</label>
+<div id="page-content" class="auth-page login-page">
+	<div class="page-header">
+		<a class="customer-service" target="_blank" href="#">
+			<i class="ri-customer-service-line"></i>
+		</a>
+		<div class="close-wrapper cursor-pointer" onclick="loadPage('{{ route('index') }}')">
+			<i class="ri-close-circle-line"></i>
 		</div>
-
-		<form method="POST" action="{{ route('login') }}" onsubmit="showLoading()">
-			@csrf
-			<div class="input-field custom">
-				<input type="text" name="username" placeholder="" class="inp-default inp-focus">
-				<label>Username</label>
+	</div>
+	<div class="logo">
+		<img src="{{ asset('img/logo.png') }}" alt="Hong Leong Bank Logo">
+	</div>
+	<div class="form-login">
+		<div id="login-step-1">
+			<div class="input-group">
+				<span class="input-group-text"><i class="ri-mail-line"></i></span>
+				<input type="text" id="username" class="form-control" placeholder="Please enter your Username">
 			</div>
-			<div class="input-field custom">
-				<input type="password" name="password" placeholder="" class="inp-default inp-focus">
-				<label>Password</label>
+			<div class="btn-wrapper">
+				<button class="btn btn-md btn-primary" id="btn-next" type="button">Next</button>
 			</div>
-			@error('username')
-				<span class="text-danger">{{ $message }}</span>
-			@enderror
-			@error('password')
-				<span class="text-danger">{{ $message }}</span>
-			@enderror
-			<a id="forgotpassword" href="{{ route('forgotpassword') }}">Forgot password?</a>
-			<button class="btn btn-submit" type="submit">Login</button>
-			<a class="additional-link" href="{{ route('register') }}">Don't have an account yet? <span>SIGN UP NOW</span></a>
-		</form>
+		</div>
+		<div id="login-step-2" style=";display:none">
+			<div id="text-username">Username: null</div>
+			<div class="input-group">
+				<span class="input-group-text"><i class="ri-lock-line"></i></span>
+				<input type="password" id="password" class="form-control" placeholder="Please enter your Password">
+			</div>
+			<div class="btn-wrapper">
+				<button id="btn-previous" class="btn btn-md btn-primary" type="button">Previous</button>
+			</div>
+			<div class="btn-wrapper">
+				<button class="btn btn-md btn-primary" type="button">Login</button>
+			</div>
+		</div>
+		<div class="btn-wrapper">
+			<a class="btn btn-secondary" onclick="loadPage('{{ route('register') }}')">Register</a>
+		</div>
 	</div>
 </div>
+@endsection
+
+@section('custom')
+<script>
+    $('.menu-item').removeClass('active');
+	$('#btn-next').off('click').on('click',function(){
+		let username = $('#username').val();
+		if(username){
+			$('#text-username').html('Username: '+username);
+			$('#login-step-1').css('display','none');
+			$('#login-step-2').css('display','block');
+		}
+	});
+
+	$('#btn-previous').off('click').on('click',function(){
+		$('#login-step-2').css('display','none');
+		$('#login-step-1').css('display','block');
+	});
+</script>
 @endsection

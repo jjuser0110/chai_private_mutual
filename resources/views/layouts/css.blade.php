@@ -1,6 +1,8 @@
-<link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"><!--
-<link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
 <link rel="stylesheet" href="{{asset('css/modal3.css')}}">
+<!--
+<link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900"> -->
 <!-- 
 <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/assets/css/slider.css">
@@ -49,44 +51,3 @@
 <style>
 
 </style>
-<script>
-	 function loadPage(path){
-        //showLoading();
-        $.ajax({
-            url: path,
-            type: "GET",
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            success: function (response) {
-                //$('#navi-menu .menu-item').removeClass('active');
-				if(response.success == true){
-          $('#content').fadeOut(200, function () {
-                    $(this).html(response.content).fadeIn(200);
-                });
-            
-			window.history.pushState({}, '', path); 
-				
-				}
-				else{
-						if(response.message == 'login'){
-						console.log('login first');
-					}
-					else{
-						alert('response.message');
-					}
-				}
-             
-
-               
-             
-            },
-            error: function () {
-                alert("Failed to load "+path+".");
-            },
-            complete: function(){
-             //   hideLoading();
-            }
-        });
-    }
-</script>

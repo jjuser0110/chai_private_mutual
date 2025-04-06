@@ -51,7 +51,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/53/M10.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/01.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">River park</div>
@@ -73,7 +73,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/47/M4.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/02.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Oil palm farm</div>
@@ -95,7 +95,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/46/M3.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/03.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Durian farm</div>
@@ -117,7 +117,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/41/M7.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/04.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Pepe #2689</div>
@@ -139,7 +139,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/40/M6.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/05.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Kanpai panda</div>
@@ -161,7 +161,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/30/M2.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/06.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Pv 22 residences</div>
@@ -183,7 +183,7 @@
             <div class="list-group-item cursor-pointer">
                 <div class="project-item d-flex align-items-center">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image: url(&quot;https://api.privatemutualhlg.com/storage/29/M1.jpg&quot;);"></div>
+                        <div class="thumbnail" style="background-image: url('{{ asset('img/project/07.jpg') }}');"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-name">The atas residence</div>
@@ -206,18 +206,10 @@
 </div>
 
 
-
-
-<div id="footer">
-    @include('layouts.navimenu')
-</div>
-
-
 @endsection
 
 @section('custom')
 <script>
-   
     var swiper = new Swiper('#join-banner', {
         loop: true,
         autoplay: {
@@ -227,9 +219,10 @@
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
-        }
+        },
+        slidesPerView: 1,
+        spaceBetween: 2,
     });
-
     $('.menu-item').removeClass('active');
     $('#join-icon').addClass('active');
 </script>
