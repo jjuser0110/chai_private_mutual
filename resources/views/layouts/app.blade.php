@@ -52,6 +52,32 @@
 			</div>
 		</div>
 
+		<div id="modal-info" class="modal cus-modal fade">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Information</h5>
+					</div>
+					<div class="modal-body" id="modal-info-content"></div>
+					<div class="modal-footer">
+						<button class="btn btn-md btn-primary w-100" id="btn-modal-info" type="button">Ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="modal-confirmation" class="modal cus-modal fade">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body" id="modal-confirmation-content">Please login first</div>
+					<div class="modal-footer">
+						<button class="btn btn-md btn-secondary" type="button" onclick="closeModal('modal-confirmation')">Cancel</button>
+						<button class="btn btn-md btn-primary" id="btn-modal-confirmation" type="button">Ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div id="modal-contact" class="modal cus-modal fade">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">

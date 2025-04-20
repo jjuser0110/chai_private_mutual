@@ -9,12 +9,9 @@
     <!-- Slider -->
     <div class="swiper-container swiper hero-swiper" id="home-banner">
         <div class="swiper-wrapper">
-            <!-- <div class="swiper-slide"><img src="{{ asset('img/sliders/slide8.webp') }}" alt="Jamesbond777"></div> -->
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/01.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/02.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/03.jpg') }}')"></div></div>
-            <div class="swiper-slide"><div class="image" style="background-image:url('{{ asset('img/banner/home/04.jpg') }}')"></div></div>
-        
+            @foreach($slides as $slide)
+            <div class="swiper-slide"><div class="image" style="background-image:url('{{ env('BACKEND_URL') }}/storage/{{ $slide->file_path }}')"></div></div>
+            @endforeach
         </div>
         <div class="swiper-pagination"></div>
     </div>

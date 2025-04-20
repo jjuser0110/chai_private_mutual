@@ -13,11 +13,11 @@
 	<div class="logo">
 		<img src="{{ asset('img/logo.png') }}" alt="Hong Leong Bank Logo">
 	</div>
-	<div class="form-login">
+	<form class="form-login"  id="form-login">
 		<div id="login-step-1">
 			<div class="input-group">
 				<span class="input-group-text"><i class="ri-mail-line"></i></span>
-				<input type="text" id="username" class="form-control" placeholder="Please enter your Username">
+				<input type="text" id="username" name="username" class="form-control" placeholder="Please enter your Username">
 			</div>
 			<div class="btn-wrapper">
 				<button class="btn btn-md btn-primary" id="btn-next" type="button">Next</button>
@@ -27,19 +27,19 @@
 			<div id="text-username">Username: null</div>
 			<div class="input-group">
 				<span class="input-group-text"><i class="ri-lock-line"></i></span>
-				<input type="password" id="password" class="form-control" placeholder="Please enter your Password">
+				<input type="password" id="password" name="password" class="form-control" placeholder="Please enter your Password">
 			</div>
 			<div class="btn-wrapper">
 				<button id="btn-previous" class="btn btn-md btn-primary" type="button">Previous</button>
 			</div>
 			<div class="btn-wrapper">
-				<button class="btn btn-md btn-primary" type="button">Login</button>
+				<button class="btn btn-md btn-primary" type="submit">Login</button>
 			</div>
 		</div>
 		<div class="btn-wrapper">
 			<a class="btn btn-secondary" onclick="loadPage('{{ route('register') }}')">Register</a>
 		</div>
-	</div>
+	</form>
 </div>
 @endsection
 
@@ -58,6 +58,37 @@
 	$('#btn-previous').off('click').on('click',function(){
 		$('#login-step-2').css('display','none');
 		$('#login-step-1').css('display','block');
+	});
+
+	$('#form-login').off('submit').on('submit', function(e) {
+		e.preventDefault();
+		showLoading();
+		var formData = new FormData(this);
+		var btn = $(this).find('button[type="submit"]');
+		$(btn).prop("disabled", true);
+		$.ajax({
+			url: "{{ route('submit_login') }}",
+			method: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+			success: function(response) {
+				if(response.success == true){
+					window.location.href = "{{ route('index') }}"
+				}
+				else{
+					showToast('error','Failed',response.message)
+				}
+			},
+			error: function() {
+				showToast('error','Failed', 'There is something wrong, please try again.')
+			},
+			complete: function(){
+				$(btn).prop("disabled", false);
+				hideLoading();
+			}
+		})
 	});
 </script>
 @endsection

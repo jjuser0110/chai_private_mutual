@@ -4,290 +4,328 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\WalletType;
-use App\Models\UserWallet;
+use App\Models\Bank;
 use App\Models\UserBank;
-use App\Models\UserOtp;
-use App\Models\UserRegisterHistory;
-use App\Models\GameLog;
-use App\Models\Game;
-use App\Models\ManualTransaction;
-use App\Models\BankInDepositTransaction;
-use App\Models\WithdrawTransaction;
-use App\Models\ResetPasswordOtp;
-use App\Models\ReferralCount;
-use App\Models\WinoverTurnoverSetting;
+use App\Models\UserAddress;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Rules\ValidBank;
-use App\Rules\ValidUser;
-use App\Rules\ValidOtp;
-use App\Rules\ValidContactNo;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class UserController extends Controller
 {
-    public function user_register(Request $request){
-        $validator = Validator::make($request->all(),
-            [
-                'username' => ['required', 'string', 'unique:users,username,NULL,id,deleted_at,NULL', 'min:8', 'max:12',
-                'regex:/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-                'name' => ['required', 'string', 'min:3','max:50','alpha_spaces'],
-                'contact_no' => ['required', 'numeric', 'unique:users,contact_no,NULL,id,deleted_at,NULL'],
-            ],
-            [
-                'username.min' => 'Username must be at least 4 characters.',
-                'username.max' => 'Username can\'t be longer than 11 characters.',
-                'username.regex' => 'Username must has alphabet and number.',
-                'password.confirmed' => 'Passwords do not match.',
-                'contact_no.unique' => 'Contact number is already in use.',
+    private function createInvitationCode(){
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        do {
+            $code = '';
+            for ($i = 0; $i < 6; $i++) {
+                $code .= $characters[random_int(0, strlen($characters) - 1)];
+            }
+        } while (!preg_match('/[a-zA-Z]/', $code) || !preg_match('/\d/', $code));
+    
+        return $code;
+    }
+
+    public function submit_register(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'username' => [
+                    'required',
+                    'string',
+                    'unique:users,username,NULL,id,deleted_at,NULL',
+                    'min:8',
+                    'max:25',
+                    'regex:/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/'
+                ],
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'confirmed',
+                    'regex:/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/'
+                ],
+            ], [
+                'username.min' => 'Username must be at least 8 characters.',
+                'username.max' => 'Username can\'t be longer than 25 characters.',
+                'username.regex' => 'Username must have both letters and numbers.',
                 'username.unique' => 'Username is already in use.',
-                'name.alpha_spaces' => 'Invalid full name.',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput($request->all());
-        }
-
-        if (substr($request->contact_no, 0, 1) === '0') {
-            $contact_no = substr($request->contact_no, 1);
-        }else{
-            $contact_no = $request->contact_no;
-        }
-        $request->merge(['contact_no'=>$contact_no]);
-
-        $check_phonenumber = User::where('contact_no',$request->contact_no)->first();
-        if(isset($check_phonenumber)){
-            return redirect()->back()->withError('system already have this number..')->withInput($request->all());
-        }
-
-        $UserHistory = UserRegisterHistory::where('contact_no',$request->contact_no)->first();
-        if($UserHistory){
-            $latestOtp = $UserHistory->latest_otp;
-            if (isset($UserHistory) && $UserHistory->latest_otp) {
-                if($latestOtp && $latestOtp->otp_received == $request->otpnumber){
-                    if($request->referral_code){
-                        $findupline = User::where('referral_code',$request->referral_code)->first();
-                        if(isset($findupline)){
-                            $request->merge(['upline'=>$findupline->id]);
-                        }
-                        else{ 
-                            return redirect()->back()->withError('Invalid Referral Code..')->withInput($request->all());
-                        }
-                    }
-                    $hidden_contact =  substr($request->contact_no, 0, 4) . str_repeat("*", strlen($request->contact_no) - 5) . substr($request->contact_no, -1);
-                    $request->merge(['password' => Hash::make($request->password),'role_id'=>3,'referral_code'=>$this->getReferral(),'hidden_contact_no'=>$hidden_contact]);
-                    $player = User::create($request->all());
-
-                    $UserHistory->update([
-                        'added_to_user' => $player->id,
-                    ]);
-                    $UserHistory->latest_otp->update([
-                        'otp_verified_at' => Carbon::now(),
-                    ]);
-
-                    // Check Referral
-                    if($request->upline){
-                        $referral_count = WinoverTurnoverSetting::where('type','referral_count')->first();
-                        $upline = User::where('id', $request->upline)->first();
-                        $total_amount = $referral_count->amount / $referral_count->pax;
-                        $total_amount =  number_format($total_amount,2,'.','');
-                        ReferralCount::create([
-                            'user_id' => $upline->id,
-                            'pax' => $referral_count->pax,
-                            'amount' => $referral_count->amount,
-                            'total_amount' => $total_amount,
-                            'downline' => $player->id
-                        ]);
-                    }
-        
-                    Auth::login($player);
-        
-                    return redirect()->route('login')->withSuccess('Registration Success');
-
-                }else{
-                    return redirect()->back()->withError('Invalid OTP..')->withInput($request->all());
-                }
-            }else{
-                return redirect()->back()->withError('Invalid OTP..')->withInput($request->all());
+            
+                'password.min' => 'Password must be at least 8 characters.',
+                'password.regex' => 'Password must contain at least one letter and one number.',
+                'password.confirmed' => 'Passwords do not match.',
+            ]);
+    
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first());
             }
-        }
-        else{
-            return redirect()->back()->withError('Invalid OTP..')->withInput($request->all());
-        }
-    }
 
-    public function create_user_bank(Request $request){
-
-        $user = Auth::user();
-        if(UserBank::where('user_id', $user->id)->count()>0){
-            return redirect()->back()->withError('Your account already link to a bank account. Please Contact Customer Service');   
-        }
-        $validator = Validator::make($request->all(), [
-            'bank_id' => ['required', 'integer'],
-            'account_no' => ['required', 'regex:/^[0-9]+$/'],
-        ]);
-
-        if ($validator->fails()) {
-            $message = "";
-            foreach($validator->messages()->messages() as $m){
-                foreach($m as $mm){
-                    $message .=$mm.'\n';
-                }
+            $upline = User::where('invitation_code',$request->invitation_code)->first();
+            if(!isset($upline)){
+                throw new Exception('Invalid invitation code');
             }
-            return redirect()->back()
-            ->withInfo($message);
+
+            $request->merge(['upline'=>$upline->id,'invitation_code'=>$this->createInvitationCode(),'name'=>$request->username,'role_id'=>3,'password'=>Hash::make($request->password)]);
+            $user = User::create($request->all());
+
+            Auth::login($user);
+            return response()->json(['success'=>true,'message'=>'Register successful']);
         }
-        // dd($request->all());
-        $request->merge(['user_id'=>$user->id]);
-
-        $createUserBank = UserBank::create($request->all());
-
-        return redirect()->route('profile')->withSuccess('Your bank has been added successfully.');
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
     }
 
-    public function clearCredit(){
-        $user = Auth::user();
-        $pendingdeposit = BankInDepositTransaction::where('user_id', $user->id)
-            ->where(function ($query) {
-                $query->where('status', 'pending')->orWhere('status', 'onhold');
-            })
-            ->count();
-
-        $pendingwithdraw = WithdrawTransaction::where('user_id',$user->id)
-            ->where(function ($query) {
-                $query->where('status', 'pending')->orWhere('status', 'onhold');
-            })
-            ->count();
-
-        $pendinggame = GameLog::where('user_id',$user->id)->whereNull('different')->count();
+    public function submit_login(Request $request){
+        try{
+            $credentials = $request->validate([
+                'username' => ['required', 'string'],
+                'password' => ['required', 'string'],
+            ]);
         
-        if($pendinggame > 0){
-            return ['status'=>false,'msg'=>"Please withdraw all credits from game to proceed."];
-        }
-
-        if($pendingdeposit > 0 || $pendingwithdraw > 0){
-            return ['status'=>false,'msg'=>"You still have transaction on pending"];
-        }
-
-        if($user->main_wallet == 0){
-            return ['status'=>false,'msg'=>"Current amount AUD 0.00"];
-        }
-
-        if($user->main_wallet >= 5){
-            return ['status'=>false,'msg'=>"Only available when credit is less than AUD 5.00"];
-        }
-
-        $original_point = $user->main_wallet;
-        $new_add_point = $user->main_wallet;
-        $final_point = 0;
-        $games = Game::pluck('id')->toArray(); 
-        $manual = ManualTransaction::create([
-            'type'=>'withdraw',
-            'user_id'=>$user->id,
-            'amount'=>$new_add_point,
-            'performed_by_id'=>$user->id,
-            'remarks'=>"User empty credits by himself"
-        ]);
-
-        $user->update(['main_wallet'=>$final_point,'winover_rate'=>null,'winover_amount'=>null,'winover_total'=>null,'function_id'=>null,'function_type'=>null]);
-        $manual->wallet_logs()->create([
-            'user_id'=>$user->id,
-            'type'=>'withdraw',
-            'amount'=>abs($new_add_point),
-            'prev_amount'=>$original_point,
-            'total'=>$final_point
-        ]);
-        return ['status'=>true,'msg'=>"Successful empty wallet"];
-    }
-
-    public function form_change_password(Request $request){
-        $user = Auth::user();
-
-        $validator = Validator::make($request->all(), [
-            'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-
-        if ($validator->fails()) {
-            $message = "";
-            foreach($validator->messages()->messages() as $m){
-                foreach($m as $mm){
-                    $message .=$mm.'\n';
-                }
+            // Attempt login
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login successful.',
+                ]);
             }
-            return redirect()->back()
-                        ->withInfo($message);
+            else{
+                throw new Exception('Invalid credential');
+            }
+
+            throw new Exception($this->error_message());
         }
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withError('The provided current password is incorrect.');
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
         }
-
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return redirect()->route('profile')->withSuccess('Password changed successfully.');
     }
 
-    public function forgot_password_request(Request $request)
+    public function bank_account()
     {
-        // dd($request->all());
-        $user = User::where('contact_no', $request->contact_no)->first();
-        if($user){
-            $otp = ResetPasswordOtp::where('user_id',$user->id)->where('otp_received',$request->otp)->exists();
-            if(!$otp){
-                return redirect()->back()->withInfo("Invalid otp")->with('contact_no',$request->contact_no)->with('reset', false);   
-            }
-            $userInfo = array(
-                'username'=>$user->username
-            );
-
-            return view('forgot_password')->with('reset', true)->with('user',$userInfo);
-
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('bank.index')->renderSections()['content'],
+                'script' => view('bank.index')->renderSections()['custom'] ?? '',
+            ]);
         }
-        else{
-            return redirect()->back()->withInfo($request->contact_no." does not exist in JamesBond777")->with('contact_no',$request->contact_no);
+        return view('bank.index');
+    }
+
+    public function add_bank_account()
+    {
+        $banks = Bank::all();
+       
+        if (request()->ajax()) {
+            $view = view('bank.add', compact('banks'))->renderSections();
+            return response()->json([
+                'success' => true,
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? '',
+            ]);
+        }
+        return view('bank.add', compact('banks'));
+    }
+
+    public function submit_add_bank(Request $request)
+    {
+        try{
+            if (!isset($request->account_no) || !is_numeric($request->account_no) || strlen($request->account_no) < 6) {
+                throw new Exception('Invalid bank account number.');
+            }
+            
+            if (!isset($request->full_name) || !preg_match('/^[a-zA-Z\s]+$/', $request->full_name) || strlen($request->full_name) < 3) {
+                throw new Exception('Invalid account holder name.');
+            }
+
+            if(!isset($request->bank_id)){
+                throw new Exception('Invalid bank');
+            }
+
+            $bank = Bank::find($request->bank_id);
+
+            if(!isset($bank)){
+                throw new Exception('Invalid bank');
+            }
+
+            UserBank::create([
+                'user_id'=>Auth::user()->id,
+                'bank_id'=>$bank->id,
+                'full_name'=>$request->full_name,
+                'account_no'=>$request->account_no,
+                'is_active'=>1
+            ]);
+
+            return response()->json(['success'=>true,'message'=>'Bank account has been added.']);
+            throw new Exception($this->error_message());
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
         }
     }
 
-    public function forgot_password_update(Request $request){
-        $user = User::where('username', $request->username)->first();
-        $input = array(
-            'username'=>$request->username
-        );
-        if(!$user){
-            return view('forgot_password')->withInfo($request->username." does not exist in JamesBond777")->with('reset', true)->with('user',$input);
-        }
-        // VALIDATION
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'confirmed']
-        ]);
-        
-        // IF VALIDATION FAILED
-        if ($validator->fails()) {
-            $message = "";
-            foreach($validator->messages()->messages() as $m){
-                foreach($m as $mm){
-                    $message .=$mm.'<br>';
-                }
+    public function submit_delete_bank(Request $request)
+    {
+        try{
+            $bank = UserBank::where('id',$request->target)->where('user_id',Auth::user()->id)->first();
+            if(!isset($bank)){
+                throw new Exception('Selected bank doest not exist.');
             }
-            return view('forgot_password')->withInfo($message)->with('reset', true)->with('user',$input);
+            $bank->delete();
+            return response()->json(['success'=>true,'message'=>'Selected bank has been deleted.']);
+            throw new Exception($this->error_message());
         }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
 
-        // IF VALIDATION PASS 
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->route('login')->withSuccess('Your password has been reset successfully.');
+    public function submit_update_account(Request $request){
+        try{
+            if (!isset($request->contact_no) || !is_numeric($request->contact_no) || strlen($request->contact_no) < 6) {
+                throw new Exception('Invalid mobile number.');
+            }
+
+            if (!isset($request->id_card) || strlen($request->id_card) < 2) {
+                throw new Exception('Invalid id card.');
+            }
+            
+            if (!isset($request->name)) {
+                throw new Exception('Invalid name.');
+            }
+
+            Auth::user()->update([
+                'contact_no'=>$request->contact_no,
+                'name'=>$request->name,
+                'id_card'=>$request->id_card
+            ]);
+
+            return response()->json(['success'=>true,'message'=>'Profile has been updated.']);
+            throw new Exception($this->error_message());
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function address()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('address.index')->renderSections()['content'],
+                'script' => view('address.index')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('address.index');
+    }
+
+    public function add_address()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('address.add')->renderSections()['content'],
+                'script' => view('address.add')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('address.add');
+    }
+
+    public function submit_add_address(Request $request)
+    {
+        try{
+            if (!isset($request->phone_no) || !is_numeric($request->phone_no) || strlen($request->phone_no) < 6) {
+                throw new Exception('Invalid phone number.');
+            }
+            
+            if (!isset($request->contact_name) || strlen($request->contact_name) < 2) {
+                throw new Exception('Invalid contact name.');
+            }
+
+            if(!isset($request->address) || strlen($request->address) < 5){
+                throw new Exception('Invaild address');
+            }
+
+            UserAddress::create([
+                'user_id'=>Auth::user()->id,
+                'contact_name'=>$request->contact_name,
+                'phone_number'=>$request->phone_no,
+                'address'=>$request->address,
+                'is_active'=>1
+            ]);
+
+            return response()->json(['success'=>true,'message'=>'Address has been added.']);
+            throw new Exception($this->error_message());
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function submit_delete_address(Request $request)
+    {
+        try{
+            $address = UserAddress::where('id',$request->target)->where('user_id',Auth::user()->id)->first();
+            if(!isset($address)){
+                throw new Exception('Selected address doest not exist.');
+            }
+            $address->delete();
+            return response()->json(['success'=>true,'message'=>'Selected address has been deleted.']);
+            throw new Exception($this->error_message());
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function order(Request $request)
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('order')->renderSections()['content'],
+                'script' => view('order')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('order');
+    }
+
+    public function load_order(Request $request){
+        try{
+            $type = !in_array($request->type,['all','shipped','not shipped','completed']) ? 'all' : $request->type;
+            $query = Order::with('shop_item','user_address')->where('user_id',Auth::user()->id)->orderBy('id','ASC');
+            if($type != 'all'){
+                $query->where('status',$type);
+            }
+          //  $orders = $query->get();
+            $orders = $query->get()->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'status' => $order->status,
+                    'item_name' => optional($order->shop_item)->item_name,
+                    'address' => optional($order->user_address)->address,
+                    'image' => optional($order->shop_item)->thumbnail()->file_path,
+                    'created_at' => $order->created_at->toDateTimeString(),
+                    // add more fields as needed
+                ];
+            });
+            return response()->json(['success'=>true,'orders'=>$orders,'message'=>'Order loaded']);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'orders'=>[],'message'=>$e->getMessage()]);
+        }
+    }
+
+    function logout(){
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
     }
 }

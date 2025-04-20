@@ -1,7 +1,7 @@
 <script>
 	function loadPage(path){
 		//showLoading();
-		closeAllModal();
+		closeAllModalInstant();
 		$.ajax({
 			url: path,
 			type: "GET",
@@ -22,13 +22,12 @@
 					});
 					window.history.pushState({}, '', path); 
 				}
+				else if(response.required_login == true){
+					openModal('modal-login');
+				}
 				else{
-					if(response.message == 'login'){
-						console.log('login first');
-					}
-					else{
-						alert('response.message');
-					}
+					alert('response.message');
+					showToast('error','Failed', response.message);
 				}
 			},
 			error: function () {
@@ -55,10 +54,57 @@
 		}
 	}
 
+	function infoModal(message, url) {
+		$('#modal-info-content').text(message);
+		openModal('modal-info');
+
+		function handleClose() {
+			closeModal('modal-info');
+			if(url != false){
+				window.location.href = url;
+			}
+			$('#btn-modal-info').off('click', handleClose);
+			$('#modal-info').off('click', outsideClick);
+		}
+
+		function outsideClick(e) {
+			if (e.target.id === 'modal-info') {
+				handleClose();
+			}
+		}
+		$('#btn-modal-info').on('click', handleClose);
+		$('#modal-info').on('click', outsideClick);
+	}
+
+	function confirmationModal(message, onConfirm) {
+		$('#modal-confirmation-content').text(message);
+		openModal('modal-confirmation');
+
+		function handleConfirm() {
+			closeModal('modal-confirmation');
+
+			if (typeof onConfirm === 'function') {
+				onConfirm();
+			}
+
+			$('#btn-modal-confirmation').off('click', handleConfirm);
+		}
+
+		$('#btn-modal-confirmation').on('click', handleConfirm);
+	}
+
 	function closeAllModal() {
 		$('.modal').removeClass('show');
 		setTimeout(() => { $('.modal').attr('style','display:none') }, 150);
 
+		if ($('.modal:visible').length === 0) {
+			$('body').removeClass('no-scroll');
+		}
+	}
+
+	function closeAllModalInstant() {
+		$('.modal').removeClass('show');
+		$('.modal').attr('style','display:none') ;
 		if ($('.modal:visible').length === 0) {
 			$('body').removeClass('no-scroll');
 		}
@@ -87,5 +133,13 @@
 
 	function hideToast(){
 		$('#toast-wrapper').removeClass('show');
+	}
+
+	function showLoading(){
+		//
+	}
+
+	function hideLoading(){
+		//
 	}
 </script>

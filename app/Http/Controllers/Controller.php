@@ -7,22 +7,29 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\FileAttachment;
 
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function error_message($m){
+        return 'There is something wrong, please try again.';
+    }
+
     public function index()
     {
+        $slides = FileAttachment::where('content_type','HomeBanner')->get();
+        $view = view('index', compact('slides'))->renderSections();
         if (request()->ajax()) {
             return response()->json([
                 'success' => true,
-                'content' => view('index')->renderSections()['content'],
-                'script' => view('index')->renderSections()['custom'] ?? ''
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? ''
             ]);
         }
-        return view('index');
+        return view('index', compact('slides'));
     }
 
     
@@ -36,18 +43,6 @@ class Controller extends BaseController
             ]);
         }
         return view('join');
-    }
-
-    public function shop()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('shop')->renderSections()['content'],
-                'script' => view('shop')->renderSections()['custom'] ?? ''
-            ]);
-        }
-        return view('shop');
     }
 
     public function register()
@@ -146,30 +141,6 @@ class Controller extends BaseController
             ]);
         }
         return view('record.money');
-    }
-
-    public function bank_account()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('bank.index')->renderSections()['content'],
-                'script' => view('bank.index')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('bank.index');
-    }
-
-    public function add_bank_account()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('bank.add')->renderSections()['content'],
-                'script' => view('bank.add')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('bank.add');
     }
     
     public function faq()

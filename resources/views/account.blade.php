@@ -8,7 +8,7 @@
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" height="20">
             </div>
             <div class="account-title">
-                <div class="username">Hi, Username</div>
+                <div class="username">Hi, {{ Auth::user()->username ?? 'User' }}</div>
                 <div class="user-level">
                     <div class="icon">
                         <img src="https://api.privatemutualhlg.com/storage/14/vip-ordinary.png" alt="ORDINARY">
@@ -19,29 +19,29 @@
         </div>
         <div class="account-funds">
             <div class="label">Available Funds</div>
-            <div class="value">0</div>
+            <div class="value">{{ Auth::user()->available_fund ?? 0 }}</div>
         </div>
         <div class="account-money-list">
             <div class="item">
                 <div class="label">Total Money</div>
-                <div class="value">0</div>
+                <div class="value">{{ Auth::user()->total_money ?? 0 }}</div>
             </div>
             <div class="item">
                 <div class="label">Unavailable Funds</div>
-                <div class="value">0</div>
+                <div class="value">{{ Auth::user()->unavailable_fund ?? 0 }}</div>
             </div>
             <div class="item">
                 <div class="label">Income</div>
-                <div class="value">0</div>
+                <div class="value">{{ Auth::user()->income ?? 0 }}</div>
             </div>
         </div>
         <div class="account-score">
             <div class="score-info">
                 <span>Credit Score:&nbsp;</span>
-                <span class="score success">80</span>
+                <span class="score success">{{ Auth::user()->credit_score ?? 0 }}</span>
             </div>
             <div class="score-progress-bar">
-                <div class="score-progress-inner success" style="width: 80%;"></div>
+                <div class="score-progress-inner success" style="width:{{ Auth::user()->credit_score ?? 0 }}%;"></div>
             </div>
             <div class="score-desc">
                 <div class="label">Account Health</div>
@@ -133,7 +133,7 @@
 
     <div class="divider"></div>
     <div class="logout-wrapper">
-        <button class="btn btn-md btn-primary btn-logout" type="button">Logout</button>
+        <button class="btn btn-md btn-primary btn-logout" type="button" onclick="window.location.href='{{ route('logout') }}'">Logout</button>
     </div>
 </div>
 @endsection

@@ -11,7 +11,7 @@
 		<i class="ri-xl ri-shopping-bag-line"></i>
 		<label>Shop</label>
 	</a>
-	<a id="account-icon" class="menu-item" onclick="openModal('modal-login')">
+	<a id="account-icon" class="menu-item" onclick="loadPage('{{ route('account') }}')">
 		<i class="ri-xl ri-account-circle-line"></i>
 		<label>My</label>
 	</a>
