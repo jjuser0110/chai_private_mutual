@@ -8,21 +8,21 @@
 
 <div id="page-content" class="history-page">
     <div class="join-record">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" id="join-record-options">
             <li class="nav-item">
-                <button id="btn-join-running" onclick="loadRunningJoin()" class="nav-link">Running</button>
+                <button class="nav-link active" onclick="loadData(this)" data-value="running">Running</button>
             </li>
             <li class="nav-item">
-                <button id="btn-join-finished"  onclick="loadFinishedJoin()" class="nav-link">Finished</button>
+                <button class="nav-link" onclick="loadData(this)" data-value="finished">Finished</button>
             </li>
         </ul>
     </div>
 
-    <div id="table-running-wrapper" class="table-wrapper">
+    <div id="table-running-wrapper" class="table-wrapper fade ">
         <div class="custom-datatable">
             <div class="flex-grow-1 mb-3">
                 <div class="b-overlay-wrap position-relative">
-                    <table class="table b-table table-dark mb-0">
+                    <table class="table b-table table-dark mb-0" id="table-running">
                         <thead>
                             <tr>
                                 <th scope="col" class="" width="30%">Project Name</th>
@@ -50,11 +50,11 @@
         </div>
     </div>
 
-    <div id="table-finished-wrapper" class="table-wrapper">
+    <div id="table-finished-wrapper" class="table-wrapper fade ">
         <div class="custom-datatable">
             <div class="flex-grow-1 mb-3">
                 <div class="b-overlay-wrap position-relative">
-                    <table class="table b-table table-dark mb-0">
+                    <table class="table b-table table-dark mb-0" id="table-finished">
                         <thead>
                             <tr>
                                 <th scope="col" class="" width="30%">Project Name</th>
@@ -89,27 +89,66 @@
 <script>
     $('.menu-item').removeClass('active');
 
-    function loadFinishedJoin(){
-        $('.join-record .nav-link').removeClass('active');
-        $('#btn-join-finished').addClass('active');
-        $('.table-wrapper').removeClass('show fade');
-        //ajax here
-        $('#table-running-wrapper').addClass('show');
-        setTimeout(() => {
-            $('#table-running-wrapper').addClass('fade');
-        }, 150);
+    function loadData(x){
+        let type = 'running';
+        if(x){
+            $('.nav-link').removeClass('active');
+            $(x).addClass('active');
+            type = $(x).data('value') ?? 'running';
+            $('.table-wrapper').removeClass('show');
+        }
+
+        $.ajax({
+			url: "{{ route('load_join') }}",
+			method: 'POST',
+			data: {type:type},
+			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+			success: function(response) {
+				if(response.success == true){
+                    let table = document.getElementById(`table-${response.type}`);
+                    let tbody = table.querySelector('tbody');
+                    tbody.innerHTML = '';
+                    if(response.data.length < 1){
+                        tbody.innerHTML = `<tr><td colspan="4" class="nodata"><div class="no-data"><div class="icon"><img src="{{ asset('img/no-data.png') }}" alt="No Data"></div><div class="label">No Data</div></div></td?</tr>`;
+                    }
+                    else{ 
+                        response.data.forEach(item => {
+                            let row = document.createElement('tr');
+                            if(response.type == 'finished'){
+                                row.innerHTML = `
+                                <td>${item.product.product_name || '-'}</td>
+                                <td class="text-center">${formatNumber(item.investment_amount ?? 0)}</td>
+                                <td class="text-center">${formatNumber(item.dividend_amount ?? 0)}</td>
+                                <td class="text-end">${formatDate(item.created_at)}</td>
+                            `;
+                            
+                            }
+                            else{
+                            
+                                row.innerHTML = `
+                                <td>${item.product.product_name || '-'}</td>
+                                <td class="text-center">${formatNumber(item.investment_amount ?? 0)}</td>
+                                <td class="text-center">${formatNumber(item.dividend_amount ?? 0)}</td>
+                                <td class="text-end">${formatDate(item.created_at)}</td>
+                            `;
+                            }
+                            tbody.appendChild(row);
+                        });
+                    }
+                    $(`#table-${response.type}-wrapper`).addClass('show');
+				}
+				else{
+					showToast('error','Failed',response.message)
+				}
+			},
+			error: function() {
+				showToast('error','Failed', 'There is something wrong, please try again.')
+			},
+			complete: function(){
+				hideLoading();
+			}
+		});
     }
-    
-    function loadRunningJoin(){
-        $('.join-record .nav-link').removeClass('active');
-        $('#btn-join-running').addClass('active');
-        $('.table-wrapper').removeClass('show fade');
-        //ajax here
-        $('#table-finished-wrapper').addClass('show');
-        setTimeout(() => {
-            $('#table-finished-wrapper').addClass('fade');
-        }, 150);
-    }
-    loadRunningJoin();
+    loadData();
 </script>
 @endsection

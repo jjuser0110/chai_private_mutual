@@ -23,6 +23,7 @@
                             </tr>
                         </thead>
                         <tbody class="flex-grow-1">
+                            @if(!isset($withdraws) || $withdraws->isEmpty())
                             <tr>
                                 <td scope="colspan" class="nodata" colspan="9">
                                     <div class="no-data">
@@ -33,6 +34,18 @@
                                     </div>
                                 </td>
                             </tr>
+                            @else
+                            @foreach($withdraws as $withdraw)
+                            <tr>
+                                <td>{{ number_format($withdraw->amount,2,'.',',') }}</td>
+                                <td>{{ $withdraw->status }}</td>
+                                <td>{{ $withdraw->user_bank->bank->bank_name }}</td>
+                                <td>{{ $withdraw->user_bank->account_no }}</td>
+                                <td>{{ $withdraw->user_bank->full_name }}</td>
+                                <td>{{ $withdraw->created_at }}</td>
+                            </tr>
+                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -41,7 +54,6 @@
         </div>
     </div>
 </div>
-
 
 @endsection
 @section('custom')

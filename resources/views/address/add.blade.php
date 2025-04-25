@@ -48,25 +48,7 @@
             </div>
         </div>
         <button class="btn btn-md btn-primary w-100" type="submit">Confirm</button></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</form>
+    </form>
 @endsection
 
 @section('custom')

@@ -25,6 +25,7 @@
                             </tr>
                         </thead>
                         <tbody class="flex-grow-1">
+                            @if(!isset($records))
                             <tr>
                                 <td scope="colspan" class="nodata" colspan="9">
                                     <div class="no-data">
@@ -35,6 +36,23 @@
                                     </div>
                                 </td>
                             </tr>
+                            @else
+                            @foreach($records as $record)
+                            @php
+                                $countdown = $record->product->created_at->copy()->addHours(2);
+                            @endphp
+                            <tr>
+                                <td>{{ $record->product->product_name ?? '-' }} </td>
+                                <td>{{ $record->status ?? '-' }}    </td>
+                                <td class="text-center">{{ number_format($record->booking_amount ?? 0,2,'.',',') }}</td>
+                                <td class="text-center">{{ $record->number ?? '-' }}</td>
+                                <td class="text-center">{{ isset($record->final_amount) ? number_format($record->final_amount,2,'.',',') : '-' }}</td>
+                                <td class="text-center countdown-timer" data-id="{{ $record->id }}" data-target="{{ $countdown->format('Y-m-d H:i:s') }}"></td>
+                                <td class="text-center">{{ $record->created_at->format('y/m/d H:i:s') }}</td>
+                                <td class="text-center"></td>
+                            </tr>
+                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -57,5 +75,31 @@
         }, 150);
     }
     loadBooking();
+
+    document.querySelectorAll('.countdown-timer').forEach(function (el) {
+        const targetTime = new Date(el.dataset.target).getTime();
+
+        const timer = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = targetTime - now;
+
+            if (distance <= 0) {
+                clearInterval(timer);
+                el.innerText = "0s";
+            } else {
+                const hours = Math.floor(distance / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                let output = "";
+
+                if (hours > 0) output += `${hours}h`;
+                if (minutes > 0 || hours > 0) output += `${minutes}m`; // keep minutes if hours exist
+                output += `${seconds}s`;
+
+                el.innerText = output;
+            }
+        }, 1000);
+    });
 </script>
 @endsection

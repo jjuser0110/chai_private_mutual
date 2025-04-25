@@ -10,13 +10,30 @@ use App\Models\UserAddress;
 use App\Models\ShopItem;
 use App\Models\FileAttachment;
 use App\Models\Order;
+use App\Models\RunningNumber;
+use App\Models\UserShopPointHistory;
 use Exception;
+use Carbon\Carbon;
 
 class ShopController extends Controller
 {
 
     function generateOrderNumber(){
-        return '834768927893';
+        $check = RunningNumber::where('code','PI')->first();
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+        if(!isset($check)){
+            $check = RunningNumber::create([
+                'code'=>"PI",
+                'year'=>$year,
+                'month'=>$month,
+                'no_of_digit_behind'=>5,
+                'running_no'=>1
+            ]);
+        }
+        $code = $check->code.$check->year.sprintf('%02d',$check->month).sprintf('%0'.$check->no_of_digit_behind.'d',$check->running_no);
+        $check->update(['running_no'=>$check->running_no+1,]);
+        return $code;
     }
 
     public function shop()
@@ -98,15 +115,26 @@ class ShopController extends Controller
                 throw new Exception('Invalid address');
             }
 
-            Order::create([
+            $order = Order::create([
                 'user_id'=>Auth::user()->id,
                 'order_no'=>$this->generateOrderNumber(),
                 'shop_item_id'=>$item->id,
                 'user_address_id'=>$address->id,
                 'status'=>'not shipped'
             ]);
+
+            $previous_amount = Auth::user()->shop_point;
             
             Auth::user()->decrement('shop_point', $item->item_point);
+
+            $order->userShopPointHistories()->create([
+                'user_id'=>Auth::user()->id,
+                'type'=>'purchase',
+                'prev_amount'=>$previous_amount,
+                'amount'=>$item->item_point,
+                'final_amount'=>Auth::user()->shop_point
+            ]);
+
             DB::commit();
             return response()->json(['success'=>true,'message'=>'Order has been placed.']);
             throw new Exception($this->error_message());

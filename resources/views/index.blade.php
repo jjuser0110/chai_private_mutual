@@ -32,176 +32,44 @@
 
     <!-- Menu -->
     <div id="content-menu">
-        <a href="#" class="item"><div class="icon"><i class="ri-newspaper-line"></i></div><span>News</span></a>
-        <a href="#" class="item"><div class="icon"><i class="ri-menu-line"></i></div><span>Join</span></a>
-        <a href="#" class="item"><div class="icon"><i class="ri-wallet-fill"></i></div><span>Withdraw</span></a>
+        <a href="#" onclick="loadPage('news')" class="item"><div class="icon"><i class="ri-newspaper-line"></i></div><span>News</span></a>
+        <a href="#" onclick="loadPage('join')" class="item"><div class="icon"><i class="ri-menu-line"></i></div><span>Join</span></a>
+        <a href="#" onclick="loadPage('withdraw')" class="item"><div class="icon"><i class="ri-wallet-fill"></i></div><span>Withdraw</span></a>
         <a href="#" class="item"><div class="icon"><i class="ri-customer-service-line"></i></div><span>Customer Service</span></a>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Agriculture -->
+    @foreach($projects as $project)
     <div class="project-wrapper">
         <div class="title">
-            <h6>Agriculture</h6>
+            <h6>{{ $project['name'] }}</h6>
         </div>
         <div class="list">
-            <div class="list-item">
+            @foreach($project['items'] as $item)
+            <div class="list-item" onclick="loadPage('{{ route('single_project',['project'=>$item->id]) }}')">
                 <div class="card">
                     <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/agriculture/01.jpg') }}')"></div>
+                        <div class="card-image" style="background-image:url(' {{ env('BACKEND_URL') }}/storage/{{ $item->thumbnail->file_path ?? '' }}')"></div>
                     </div>
                     <div class="card-bottom">
-                        <div class="card-title">Oil Palm Farm</div>
-                        <div class="card-content">Belong to: Agriculture</div>
-                        <div class="card-content">User Level: Gold</div>
-                        <div class="card-content">Booking Amount: MYR 110,000.00</div>
+                        <div class="card-title">{{ $item->product_name }}</div>
+                        <div class="card-content">Belong to: {{ $project['name'] }}</div>
+                        <div class="card-content">User Level: {{ $item->user_level ?? '-'}}</div>
+                        <div class="card-content">Booking Amount: MYR {{ number_format($item->product_price,2,'.',',') }}</div>
                         <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
+                            <div class="progress-bar" style="width:{{ $item->product_percentage }}%;">
+                                <div class="label">{{ $item->product_percentage }}%</div>
                             </div>
                         </div>
                     </div>
                 </div>  
             </div>
-
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/agriculture/02.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">Durian Farm</div>
-                        <div class="card-content">Belong to: Agriculture</div>
-                        <div class="card-content">User Level: Silver</div>
-                        <div class="card-content">Booking Amount: MYR 72,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
+            @endforeach
         </div>
     </div>
-
     <div class="divider"></div>
-
-    <!-- Architecture -->
-    <div class="project-wrapper">
-        <div class="title">
-            <h6>Architecture</h6>
-        </div>
-        <div class="list">
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/architecture/01.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">River Park</div>
-                        <div class="card-content">Belong to: Architecture</div>
-                        <div class="card-content">User Level: Diamond</div>
-                        <div class="card-content">Min Invest Amount: MYR 250,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/architecture/02.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">PV 22 Residences</div>
-                        <div class="card-content">Belong to: Architecture</div>
-                        <div class="card-content">User Level: Diamond</div>
-                        <div class="card-content">Min Invest Amount: MYR 300,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/architecture/03.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">The Atas Residence</div>
-                        <div class="card-content">Belong to: Architecture</div>
-                        <div class="card-content">User Level: Diamond</div>
-                        <div class="card-content">Min Invest Amount: MYR 400,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- Nft -->
-    <div class="project-wrapper">
-        <div class="title">
-            <h6>NFT</h6>
-        </div>
-        <div class="list">
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/nft/01.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">Pepe #2689</div>
-                        <div class="card-content">Belong to: Nft</div>
-                        <div class="card-content">User Level: Gold</div>
-                        <div class="card-content">Booking Amount: MYR 120,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-
-            <div class="list-item">
-                <div class="card">
-                    <div class="card-image-wrapper">
-                        <div class="card-image" style="background-image:url('{{ asset('img/project/nft/02.jpg') }}')"></div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="card-title">Kanpai Panda</div>
-                        <div class="card-content">Belong to: Nft</div>
-                        <div class="card-content">User Level: Silver</div>
-                        <div class="card-content">Booking Amount: MYR 50,000.00</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%;">
-                                <div class="label">100%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </div>
-
-    <div class="divider"></div>
+    @endforeach
 </div>
 @endsection
 @section('custom')

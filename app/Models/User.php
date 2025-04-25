@@ -41,6 +41,7 @@ class User extends Authenticatable
         'credit_score',
         'shop_point',
         'account_health',
+        'fund_password',
     ];
 
     /**
@@ -75,5 +76,40 @@ class User extends Authenticatable
     public function user_addresses()
     {
         return $this->hasMany('App\Models\UserAddress');
+    }
+
+    public function upline_detail()
+    {
+        return $this->belongsTo('App\Models\User','upline');
+    }
+
+    public function user_scores()
+    {
+        return $this->hasMany('App\Models\UserScore')->orderBy('created_at','DESC');
+    }
+
+    public function money_records()
+    {
+        return $this->hasMany('App\Models\MoneyRecord')->orderBy('created_at','DESC');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany('App\Models\Booking')->orderBy('created_at','DESC');
+    }
+
+    public function join_records()
+    {
+        return $this->hasMany('App\Models\JoinRecord')->orderBy('created_at','DESC');
+    }
+
+    public function getUnavailableFundAttribute()
+    {
+        return round($this->bookings()->sum('total_payment')+$this->join_records()->sum('investment_amount'),2);
+    }
+
+    public function getTotalMoneyAttribute()
+    {
+        return round($this->unavailable_fund+$this->available_fund,2);
     }
 }

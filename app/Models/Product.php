@@ -21,18 +21,28 @@ class Product extends Model
         'project_deadline',
         'user_level',
         'investment_amount',
+        'investment_amount_to',
         'project_rules',
         'is_active',
+        'display',
+        'earning_yield_unit',
+        'project_deadline_unit',
+        'product_type',
     ];
 
-    public function product_category()
+    public function category()
     {
-        return $this->belongsTo('App\Models\ProductCategory');
+        return $this->belongsTo('App\Models\ProductCategory','product_category_id');
     }
 
 	public function last_file()
     {
         return $this->morphOne('App\Models\FileAttachment', 'content')->latest();
+    }
+
+    public function thumbnail()
+    {
+        return $this->morphOne(\App\Models\FileAttachment::class, 'content')->oldest('id');
     }
 
     public function file_attachments()

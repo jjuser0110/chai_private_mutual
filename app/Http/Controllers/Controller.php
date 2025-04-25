@@ -7,8 +7,10 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Booking;
 use App\Models\FileAttachment;
-
+use App\Models\Product;
+use App\Models\ProductCategory;
 
 class Controller extends BaseController
 {
@@ -21,28 +23,44 @@ class Controller extends BaseController
     public function index()
     {
         $slides = FileAttachment::where('content_type','HomeBanner')->get();
-        $view = view('index', compact('slides'))->renderSections();
+        $projects = [];
+        $categories = ProductCategory::where('is_active', 1)->get();
+        foreach ($categories as $category) {
+            $projects[] = [
+                'name' => $category->category_name,
+                'items' => Product::with('thumbnail')->where('product_category_id', $category->id)
+                    ->where('display', 'like', '%home%')
+                    ->where('is_active', 1)
+                    ->get()
+            ];
+        }
+
         if (request()->ajax()) {
+            $view = view('index', compact('slides','projects'))->renderSections();
             return response()->json([
                 'success' => true,
                 'content' => $view['content'],
                 'script' => $view['custom'] ?? ''
             ]);
         }
-        return view('index', compact('slides'));
+        return view('index', compact('slides','projects'));
     }
 
     
     public function join()
     {
+        $slides = FileAttachment::where('content_type','ProductBanner')->get();
+        $categories = ProductCategory::where('is_active', 1)->get();
+        $projects = Product::with('thumbnail')->where('display', 'like', '%join%')->where('is_active', 1)->get();
         if (request()->ajax()) {
+            $view = view('join', compact('slides','categories','projects'))->renderSections();
             return response()->json([
                 'success' => true,
-                'content' => view('join')->renderSections()['content'],
-                'script' => view('join')->renderSections()['custom'] ?? ''
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? ''
             ]);
         }
-        return view('join');
+        return view('join',compact('slides','categories','projects'));
     }
 
     public function register()
@@ -94,54 +112,6 @@ class Controller extends BaseController
         }
         return view('update_account');
     }
-
-    public function join_record()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('record.join')->renderSections()['content'],
-                'script' => view('record.join')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('record.join');
-    }
-
-    public function booking_record()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('record.booking')->renderSections()['content'],
-                'script' => view('record.booking')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('record.booking');
-    }
-
-    public function withdraw_record()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('record.withdraw')->renderSections()['content'],
-                'script' => view('record.withdraw')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('record.withdraw');
-    }
-
-    public function money_record()
-    {
-        if (request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'content' => view('record.money')->renderSections()['content'],
-                'script' => view('record.money')->renderSections()['custom'] ?? '',
-            ]);
-        }
-        return view('record.money');
-    }
     
     public function faq()
     {
@@ -179,4 +149,15 @@ class Controller extends BaseController
         return view('withdraw');
     }
 
+    public function news()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('news')->renderSections()['content'],
+                'script' => view('news')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('news');
+    }
 }

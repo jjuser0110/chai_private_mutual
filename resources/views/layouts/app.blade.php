@@ -91,6 +91,50 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="modal-project-password" class="modal cus-modal fade">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body">
+						<form id="form-project">
+							<input type="hidden" name="project" id="project-id"/>
+							<div class="label">
+								<small class="text-muted">Please Enter The Password</small>
+							</div>
+							<div class="input-group">
+								<div class="input-group-text">
+									<i class="ri-lock-line"></i>
+								</div>
+								<input id="password" class="form-control" type="password" name="password" placeholder="Password">
+							</div>
+							<button class="btn btn-md btn-primary w-100 border-0" type="submit">Confirm</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="modal-project-category" class="modal cus-modal fade">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body">
+						<form id="form-project-category">
+							<input type="hidden" name="category" id="input-project-category"/>
+							<div class="label">
+								<small class="text-muted">Please Enter The Password</small>
+							</div>
+							<div class="input-group">
+								<div class="input-group-text">
+									<i class="ri-lock-line"></i>
+								</div>
+								<input id="password" class="form-control" type="password" name="password" placeholder="Password">
+							</div>
+							<button class="btn btn-md btn-primary w-100 border-0" type="submit">Confirm</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	
 		<div id="footer">
 			@include('layouts.navimenu')
@@ -98,4 +142,5 @@
 		<div id="custom-script">
 			@yield('custom')
 		</div>
+	</body>
 </html>

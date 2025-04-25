@@ -20,7 +20,7 @@
 						$(this).html(response.content).fadeIn(150);
 						$('#custom-script').html(response.script ?? '');
 					});
-					window.history.pushState({}, '', path); 
+					window.history.pushState({ path: path }, '', path);
 				}
 				else if(response.required_login == true){
 					openModal('modal-login');
@@ -39,6 +39,12 @@
 		});
 	}
 
+	window.addEventListener('popstate', function(event) {
+		if (event.state && event.state.path) {
+			loadPage(event.state.path); // Reload the page via AJAX when history changes
+		}
+	});
+
 	function openModal(modalId) {
 		$('#' + modalId).attr('style','display:block');
 		setTimeout(() => { $('#' + modalId).addClass('show') }, 150);
@@ -49,9 +55,10 @@
 		$('#' + modalId).removeClass('show');
 		setTimeout(() => { $('#' + modalId).attr('style','display:none')}, 150);
 
-		if ($('.modal:visible').length === 0) {
-			$('body').removeClass('no-scroll');
-		}
+		// if ($('.modal:visible').length === 0) {
+		// 	$('body').removeClass('no-scroll');
+		// }
+		$('body').removeClass('no-scroll');
 	}
 
 	function infoModal(message, url) {
@@ -97,17 +104,19 @@
 		$('.modal').removeClass('show');
 		setTimeout(() => { $('.modal').attr('style','display:none') }, 150);
 
-		if ($('.modal:visible').length === 0) {
-			$('body').removeClass('no-scroll');
-		}
+		// if ($('.modal:visible').length === 0) {
+		// 	$('body').removeClass('no-scroll');
+		// }
+		$('body').removeClass('no-scroll');
 	}
 
 	function closeAllModalInstant() {
 		$('.modal').removeClass('show');
-		$('.modal').attr('style','display:none') ;
-		if ($('.modal:visible').length === 0) {
-			$('body').removeClass('no-scroll');
-		}
+		$('.modal').attr('style','display:none');
+		// if ($('.modal:visible').length === 0) {
+		// 	$('body').removeClass('no-scroll');
+		// }
+		$('body').removeClass('no-scroll');
 	}
 
 	$(document).on('click', '.modal', function(e) {
@@ -142,4 +151,18 @@
 	function hideLoading(){
 		//
 	}
+
+	function formatNumber(x) {
+		return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+	}
+
+	function formatDate(dateString){
+        const date = new Date(dateString);
+        // Get the date in 'YYYY-MM-DD HH:mm' format
+        return date.getFullYear() + '-' +
+           ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + date.getDate()).slice(-2) + ' ' +
+           ('0' + date.getHours()).slice(-2) + ':' +
+           ('0' + date.getMinutes()).slice(-2);
+    }
 </script>

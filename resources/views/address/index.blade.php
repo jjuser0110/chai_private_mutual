@@ -24,26 +24,7 @@
         </div>
         @endforeach
         <button class="btn btn-md btn-primary w-100" type="button" onclick="loadPage('{{ route('add_address') }}')"><span>Add Address</span></button>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </div>
 @endsection
 

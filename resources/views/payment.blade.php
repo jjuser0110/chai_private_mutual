@@ -58,7 +58,7 @@
 			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
 			success: function(response) {
 				if(response.success == true){
-					infoModal(response.message, "{{ route('update_account') }}")
+					infoModal(response.message, "{{ route('order') }}")
 				}
 				else{
 					showToast('error','Failed',response.message)

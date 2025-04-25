@@ -26,8 +26,6 @@
 
     <div id="orders-wrapper" class="fade"></div>
 </div>
-
-
 @endsection
 @section('custom')
 <script>

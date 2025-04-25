@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Bank;
 use App\Models\UserBank;
+use App\Models\Booking;
+use App\Models\JoinRecord;
 use App\Models\UserAddress;
+use App\Models\UserShopPointHistory;
+use App\Models\UserScore;
 use App\Models\Order;
+use App\Models\Withdraw;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -319,6 +324,132 @@ class UserController extends Controller
         }
         catch(Exception $e){
             return response()->json(['success'=>false,'orders'=>[],'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function submit_withdraw(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            if(!isset($request->amount) || !is_numeric($request->amount)){
+                throw new Exception('Invalid withdraw amount.');
+            }
+        
+            if(Auth::user()->available_fund < $request->amount){
+                throw new Exception('Insufficient amount.');
+            }
+
+            if(!isset($request->bank)){
+                throw new Exception('Please select you bank account.');
+            }
+
+            if(!isset($request->fund_password) || $request->fund_password != Auth::user()->fund_password){
+                throw new Exception('Invalid fund password.'); 
+            }
+
+            $bank = UserBank::where('id',$request->bank)->where('user_id',Auth::user()->id)->first();
+            if(!isset($bank)){
+                throw new Exception('Invalid bank account.');
+            }
+            
+            Withdraw::create([
+                'user_id'=>Auth::user()->id,
+                'user_bank_id'=>$bank->id,
+                'amount'=>$request->amount
+            ]);
+
+            Auth::user()->decrement('available_fund', $request->amount);
+            DB::commit();
+            return response()->json(['success'=>true,'message'=>'Withdraw has been submited.']);
+            throw new Exception($this->error_message());
+        }
+        catch(Exception $e){
+            DB::rollback();
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
+    
+    public function withdraw_record()
+    {
+        $withdraws = Withdraw::where('user_id',Auth::user()->id)->get();
+        if (request()->ajax()) {
+            $view = view('record.withdraw', compact('withdraws'))->renderSections();
+            return response()->json([
+                'success' => true,
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? '',
+            ]);
+        }
+        return view('record.withdraw',compact('withdraws'));
+    }
+
+    public function join_record()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('record.join')->renderSections()['content'],
+                'script' => view('record.join')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('record.join');
+    }
+
+    public function load_join(Request $request){
+        try{
+            $type = !in_array(strtolower($request->type),['running','finished']) ? 'running' : strtolower($request->type);
+            $data = JoinRecord::with('product')->where('user_id',Auth::user()->id)->where('status', ucfirst($type))->get();
+            return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded','type'=>$type]);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'data'=>[],'message'=>$e->getMessage(),'type'=>$type,'qw'=>$request->type]);
+        }
+    }
+
+    public function booking_record()
+    {
+        $records = Booking::where('user_id',Auth::user()->id)->get();
+        if (request()->ajax()) {
+            $view = view('record.booking',compact('records'))->renderSections();
+            return response()->json([
+                'success' => true,
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? '',
+            ]);
+        }
+        return view('record.booking',compact('records'));
+    }
+
+    public function money_record()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('record.money')->renderSections()['content'],
+                'script' => view('record.money')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('record.money');
+    }
+
+    public function load_balance(Request $request){
+        try{
+            $data = UserShopPointHistory::where('user_id',Auth::user()->id)->get();
+            return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'data'=>[],'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function load_score(Request $request){
+        try{
+            $data = UserScore::where('user_id',Auth::user()->id)->get();
+            return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'data'=>[],'message'=>$e->getMessage()]);
         }
     }
 

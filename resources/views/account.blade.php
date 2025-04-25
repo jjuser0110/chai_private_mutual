@@ -19,7 +19,7 @@
         </div>
         <div class="account-funds">
             <div class="label">Available Funds</div>
-            <div class="value">{{ Auth::user()->available_fund ?? 0 }}</div>
+            <div class="value">{{ number_format((Auth::user()->available_fund ?? 0) +  (Auth::user()->unavailable_fund ?? 0) +  (Auth::user()->total_money ?? 0),2,'.',',') }}</div>
         </div>
         <div class="account-money-list">
             <div class="item">
@@ -35,17 +35,40 @@
                 <div class="value">{{ Auth::user()->income ?? 0 }}</div>
             </div>
         </div>
+        @php
+            if(Auth::user()->credit_score >= 80){
+                $status = 'Good';;
+                $color = 'success';
+            }
+            else if(Auth::user()->credit_score >= 60 && Auth::user()->credit_score < 80){
+                $status = 'Fair';
+                $color = 'warning';
+            }
+            else if(Auth::user()->credit_score >= 40 && Auth::user()->credit_score < 60){
+                $status = 'Poor';
+                $color = 'warning';
+            }
+            else if(Auth::user()->credit_score >= 20 && Auth::user()->credit_score < 40){
+                $status = 'Very Poor';
+                $color = 'danger';
+            }
+            else{
+                $status = 'Extremely Poor';
+                $color = 'danger';
+            }
+
+        @endphp
         <div class="account-score">
             <div class="score-info">
                 <span>Credit Score:&nbsp;</span>
-                <span class="score success">{{ Auth::user()->credit_score ?? 0 }}</span>
+                <span class="score {{ $color }}">{{ Auth::user()->credit_score ?? 0 }}</span>
             </div>
             <div class="score-progress-bar">
-                <div class="score-progress-inner success" style="width:{{ Auth::user()->credit_score ?? 0 }}%;"></div>
+                <div class="score-progress-inner {{ $color }}" style="width:{{ Auth::user()->credit_score ?? 0 }}%;"></div>
             </div>
             <div class="score-desc">
                 <div class="label">Account Health</div>
-                <div class="value success">Good</div>
+                <div class="value {{ $color }}">{{ $status }}</div>
             </div>
         </div>
         <div class="account-buttons">
