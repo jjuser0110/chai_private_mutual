@@ -110,6 +110,101 @@ class UserController extends Controller
         }
     }
 
+    public function setup()
+    {
+        if(Auth::user()->setup == 0){
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'content' => view('auth.setup')->renderSections()['content'],
+                    'script' => view('auth.setup')->renderSections()['custom'] ?? '',
+                ]);
+            }
+            return view('auth.setup');
+        }
+        else{
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'content' => view('account')->renderSections()['content'],
+                    'script' => view('account')->renderSections()['custom'] ?? '',
+                ]);
+            }
+            return redirect()->route('index');
+        }
+    }
+
+    public function submit_setup(Request $request){
+        try{
+            DB::beginTransaction();
+            $validator = Validator::make($request->all(),[
+                'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
+                'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
+                'nric_no' => 'required|numeric',
+                'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
+                'email' => 'required|email',
+                'contact_no' => 'required|numeric',
+                'fund_password' => 'required|min:6',
+                ], [
+                'nric_front.required' => 'Front NRIC image is required.',
+                'nric_front.image' => 'Front NRIC must be a valid image.',
+                'nric_back.required' => 'Back NRIC image is required.',
+                'nric_back.image' => 'Back NRIC must be a valid image.',
+                'nric_no.required' => 'NRIC number is required.',
+                'nric_no.numeric' => 'NRIC number must be numeric.',
+                'name.required' => 'Name is required.',
+                'name.regex' => 'Name must contain only letters and spaces.',
+                'email.required' => 'Email is required.',
+                'email.email' => 'Please enter a valid email address.',
+                'fund_password.required' => 'Fund password is required.',
+                'fund_password.min' => 'Fund password must be at least 6 characters long.',
+                'contact_no.required'=>'Contact no is required.',
+                'contact_no.numeric'=>'Invalid contact no.'
+                ]);
+    
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first()); 
+            }
+            
+            $timestamp = now()->timestamp;
+            if ($request->hasFile('nric_front')) {
+                $frontImage = $request->file('nric_front');
+                $frontPath = $frontImage->storeAs(
+                    "nric/".Auth::user()->id,
+                    $timestamp."_front." . $frontImage->getClientOriginalExtension(),
+                    'public'
+                );
+            }
+    
+            if ($request->hasFile('nric_back')) {
+                $backImage = $request->file('nric_back');
+                $backPath = $backImage->storeAs(
+                    "nric/".Auth::user()->id,
+                    $timestamp."_back." . $backImage->getClientOriginalExtension(),
+                    'public'
+                );
+            }
+            
+            $user = User::where('id', Auth::user()->id)->first();
+            $user->update([
+                'contact_no'=>$request->contact_no,
+                'email'=>$request->email,
+                'name'=>$request->name,
+                'fund_password'=>$request->fund_password,
+                'nric_front'=>$timestamp."_front." . $frontImage->getClientOriginalExtension(),
+                'nric_back'=>$timestamp."_back." . $backImage->getClientOriginalExtension(),
+                'setup'=>1,
+                'nric_no'=>$request->nric_no,
+            ]);
+            DB::commit();
+            return response()->json(['success'=>true,'message'=>'Profile has been updated.']);
+        }
+        catch(Exception $e){
+            DB::rollback();
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
     public function bank_account()
     {
         if (request()->ajax()) {

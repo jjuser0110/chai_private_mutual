@@ -30,4 +30,9 @@ class UserShopPointHistory extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function wallet_logs()
+    {
+        return $this->morphMany('App\Models\UserWalletLog', 'content');
+    }
 }

@@ -42,6 +42,10 @@ class User extends Authenticatable
         'shop_point',
         'account_health',
         'fund_password',
+        'nric_no',
+        'nric_front',
+        'nric_back',
+        'setup'
     ];
 
     /**
