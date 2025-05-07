@@ -41,6 +41,7 @@
     <div class="divider"></div>
 
     @foreach($projects as $project)
+    @if(count($project['items'])>0)
     <div class="project-wrapper">
         <div class="title">
             <h6>{{ $project['name'] }}</h6>
@@ -69,6 +70,7 @@
         </div>
     </div>
     <div class="divider"></div>
+    @endif
     @endforeach
 </div>
 @endsection

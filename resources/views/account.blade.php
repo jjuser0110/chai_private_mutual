@@ -22,7 +22,7 @@
         </div>
         <div class="account-funds">
             <div class="label">Available Funds</div>
-            <div class="value">{{ number_format((Auth::user()->available_fund),2,'.',',') }}</div>
+            <div class="value">{{ number_format((Auth::user()->available_fund ?? 0),2,'.',',') }}</div>
         </div>
         <div class="account-money-list">
             <div class="item">

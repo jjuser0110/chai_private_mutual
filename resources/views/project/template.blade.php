@@ -28,16 +28,25 @@
             </div>
             <div class="data-item">
                 <div class="data-item-title">Earning Yield</div>
-                <div class="data-item-content">{{ $project->earning_yield ?? '-' }}%</div>
+                <div class="data-item-content">{{ number_format($project->earning_yield,2,'.',',') }}{{ $project->earning_yield_unit ?? '-' }}</div>
             </div>
+            
             <div class="data-item">
                 <div class="data-item-title">Project Deadline</div>
-                <div class="data-item-content">{{ $project->project_deadline ?? '-' }}</div>
+                <div class="data-item-content">{{ $project->project_deadline ?? '-' }} {{ $project->project_deadline_unit ?? '-' }}</div>
             </div>
+            <!-- @if(strtolower($project->product_type) == 'normal')
+            @else
+            @php $countdown = $project->created_at->copy()->addHours(2); @endphp
+            <div class="data-item">
+                <div class="data-item-title">Project Deadline</div>
+                <div class="data-item-content countdown-timer" data-id="{{ $project->id }}" data-target="{{ $countdown->format('Y-m-d H:i:s') }}"></div>
+            </div>
+            @endif -->
         </div>
         <div class="row">
             <div class="label-title">Description</div>
-            <div class="label-content">{{ $project->user_level }} Member</div>
+            <div class="label-content">{{ $project->description }} Member</div>
         </div>
         <div class="row">
             <div class="label-title">Investment Amount</div>
