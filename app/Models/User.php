@@ -116,4 +116,19 @@ class User extends Authenticatable
     {
         return round($this->unavailable_fund+$this->available_fund,2);
     }
+
+    public function getVerificationAttribute()
+    {
+        if($this->setup == 0){
+            $verification = "Unverified";
+        }else if($this->setup == 1){
+            $verification = "Pending Verification";
+        }else if($this->setup == 2){
+            $verification = "Verified";
+        }else{
+            $verification = "Verification Failed";
+        };
+
+        return $verification;
+    }
 }

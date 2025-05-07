@@ -10,7 +10,7 @@ class EnsureUserIsSetup
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->setup == 0 && !$request->is('setup')) {
+        if (Auth::check() && (Auth::user()->setup == 0 || Auth::user()->setup == 4)  && ! $request->is('setup*') && ! $request->is('setup') && ! $request->is('setup/*') && ! $request->is('submit_setup')) {
             if ($request->ajax()) {
                 $view = view('auth.setup')->renderSections();
                 return response()->json([

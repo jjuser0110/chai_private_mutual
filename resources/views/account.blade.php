@@ -15,11 +15,14 @@
                     </div>
                     <div class="label">Ordinary</div>
                 </div>
+                <div id="profile-verify-label" class="{{ Auth::user()->setup == 2 ? 'success' : 'warning' }}">
+                    {{ Auth::user()->getVerificationAttribute() }}
+                </div>
             </div>
         </div>
         <div class="account-funds">
             <div class="label">Available Funds</div>
-            <div class="value">{{ number_format((Auth::user()->available_fund ?? 0) +  (Auth::user()->unavailable_fund ?? 0) +  (Auth::user()->total_money ?? 0),2,'.',',') }}</div>
+            <div class="value">{{ number_format((Auth::user()->available_fund),2,'.',',') }}</div>
         </div>
         <div class="account-money-list">
             <div class="item">

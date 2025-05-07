@@ -56,6 +56,8 @@ Route::middleware(['ForceSetup'])->group(function() {
         Route::get('/money-records', [App\Http\Controllers\UserController::class, 'money_record'])->name('money_record');
         Route::post('/load_score', [App\Http\Controllers\UserController::class, 'load_score'])->name('load_score');
         Route::post('/load_balance', [App\Http\Controllers\UserController::class, 'load_balance'])->name('load_balance');
+        Route::get('/final_payment/{booking}', [App\Http\Controllers\UserController::class, 'final_payment'])->name('final_payment');
+        Route::post('/submit_final_payment', [App\Http\Controllers\UserController::class, 'submit_final_payment'])->name('submit_final_payment');
     });
     Route::get('/faq', [App\Http\Controllers\Controller::class, 'faq'])->name('faq');
     Route::get('/about_us', [App\Http\Controllers\Controller::class, 'about_us'])->name('about_us'); 
@@ -64,6 +66,7 @@ Route::middleware(['ForceSetup'])->group(function() {
 Route::middleware(['auth'])->group(function() {
     Route::get('/setup', [App\Http\Controllers\UserController::class, 'setup'])->name('setup');
     Route::post('/submit_setup', [App\Http\Controllers\UserController::class, 'submit_setup'])->name('submit_setup');
+    Route::post('/submit_resetup', [App\Http\Controllers\UserController::class, 'submit_resetup'])->name('submit_resetup');
 });
 
 Route::get('/logout', [App\Http\Controllers\UserController::class, 'logout'])->name('logout');

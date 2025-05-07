@@ -103,7 +103,7 @@ class UserController extends Controller
                 throw new Exception('Invalid credential');
             }
 
-            throw new Exception($this->error_message());
+            throw new Exception($this->error_message());    
         }
         catch(Exception $e){
             return response()->json(['success'=>false,'message'=>$e->getMessage()]);
@@ -112,7 +112,7 @@ class UserController extends Controller
 
     public function setup()
     {
-        if(Auth::user()->setup == 0){
+        if(Auth::user()->setup == 0 || Auth::user()->setup == 4){
             if (request()->ajax()) {
                 return response()->json([
                     'success' => true,
@@ -140,24 +140,30 @@ class UserController extends Controller
             $validator = Validator::make($request->all(),[
                 'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
                 'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
-                'nric_no' => 'required|numeric',
+                'nric_no_front' => 'required|digits:6',
+                'nric_no_mid' => 'required|digits:2',
+                'nric_no_end' => 'required|digits:4',
                 'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 'email' => 'required|email',
                 'contact_no' => 'required|numeric',
-                'fund_password' => 'required|min:6',
+                'fund_password' => 'required|min:8',
                 ], [
                 'nric_front.required' => 'Front NRIC image is required.',
                 'nric_front.image' => 'Front NRIC must be a valid image.',
                 'nric_back.required' => 'Back NRIC image is required.',
                 'nric_back.image' => 'Back NRIC must be a valid image.',
-                'nric_no.required' => 'NRIC number is required.',
-                'nric_no.numeric' => 'NRIC number must be numeric.',
+                'nric_no_front.required' => 'Invalid NRIC.',
+                'nric_no_front.digits' => 'Invalid NRIC.',
+                'nric_no_mid.required' => 'Invalid NRIC.',
+                'nric_no_mid.digits' => 'Invalid NRIC.',
+                'nric_no_end.required' => 'Invalid NRIC.',
+                'nric_no_end.digits' => 'Invalid NRIC.',
                 'name.required' => 'Name is required.',
                 'name.regex' => 'Name must contain only letters and spaces.',
                 'email.required' => 'Email is required.',
                 'email.email' => 'Please enter a valid email address.',
                 'fund_password.required' => 'Fund password is required.',
-                'fund_password.min' => 'Fund password must be at least 6 characters long.',
+                'fund_password.min' => 'Fund password must be at least 8 characters long.',
                 'contact_no.required'=>'Contact no is required.',
                 'contact_no.numeric'=>'Invalid contact no.'
                 ]);
@@ -174,6 +180,10 @@ class UserController extends Controller
                     $timestamp."_front." . $frontImage->getClientOriginalExtension(),
                     'public'
                 );
+            }
+
+            if($request->fund_password != $request->confirm_fund_password){
+                throw new Exception('Fund passwords does not match');
             }
     
             if ($request->hasFile('nric_back')) {
@@ -194,13 +204,26 @@ class UserController extends Controller
                 'nric_front'=>$timestamp."_front." . $frontImage->getClientOriginalExtension(),
                 'nric_back'=>$timestamp."_back." . $backImage->getClientOriginalExtension(),
                 'setup'=>1,
-                'nric_no'=>$request->nric_no,
+                'nric_no'=>$request->nric_no_front.'-'.$request->nric_no_mid.'-'.$request->nric_no_end,
             ]);
             DB::commit();
             return response()->json(['success'=>true,'message'=>'Profile has been updated.']);
         }
         catch(Exception $e){
             DB::rollback();
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+
+    public function submit_resetup(Request $request){
+        try{
+            if(Auth::user()->setup == 4 || Auth::user()->setup == 0){
+                Auth::user()->update(['setup'=>0]);
+                return response()->json(['success'=>true, 'message'=>'Re-setup account.']);
+            }
+            throw new Exception('There is somethibng wrong, please try again.');
+        }
+        catch(Exception $e){
             return response()->json(['success'=>false,'message'=>$e->getMessage()]);
         }
     }
@@ -514,6 +537,65 @@ class UserController extends Controller
             ]);
         }
         return view('record.booking',compact('records'));
+    }
+
+    public function final_payment(Request $request)
+    {
+        $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Waiting for final payment')->first();
+        if (request()->ajax()) {
+            $view = view('final_payment',compact('booking'))->renderSections();
+            return response()->json([
+                'success' => true,
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? '',
+            ]);
+        }
+        return view('final_payment',compact('booking'));
+    }
+
+    public function submit_final_payment(Request $request)
+    {
+        try{
+            DB::beginTransaction();
+            if(!isset($request->booking)){
+                throw new Exception('Failed to fetch booking details, please try again.');
+            }
+    
+            $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Waiting for final payment')->first();
+    
+            if(!isset($booking)){
+                throw new Exception('Failed to fetch booking details, please try again.');
+            }
+    
+            if($booking->countdown < Carbon::now()){
+                throw new Exception('The booking request is expired.');
+            }
+
+            if(Auth::user()->available_fund < $booking->final_payment){
+                throw new Exception('Insufficient fund');
+            }
+
+            Auth::user()->decrement('available_fund', $booking->final_payment);
+            $booking->update(['status'=>'Complete final payment']);
+            DB::commit();
+            return response()->json(['success'=>true,'message'=>"Payment submmited"]);
+        }
+        catch(Exception $e){
+            DB::rollback();
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+      
+
+
+        if (request()->ajax()) {
+            $view = view('final_payment',compact('booking'))->renderSections();
+            return response()->json([
+                'success' => true,
+                'content' => $view['content'],
+                'script' => $view['custom'] ?? '',
+            ]);
+        }
+        return view('final_payment',compact('booking'));
     }
 
     public function money_record()

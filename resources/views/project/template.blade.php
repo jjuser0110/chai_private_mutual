@@ -30,18 +30,10 @@
                 <div class="data-item-title">Earning Yield</div>
                 <div class="data-item-content">{{ $project->earning_yield ?? '-' }}%</div>
             </div>
-            @if(strtolower($project->product_type) == 'normal')
             <div class="data-item">
                 <div class="data-item-title">Project Deadline</div>
                 <div class="data-item-content">{{ $project->project_deadline ?? '-' }}</div>
             </div>
-            @else
-            @php $countdown = $project->created_at->copy()->addHours(2); @endphp
-            <div class="data-item">
-                <div class="data-item-title">Project Deadline</div>
-                <div class="data-item-content countdown-timer" data-id="{{ $project->id }}" data-target="{{ $countdown->format('Y-m-d H:i:s') }}"></div>
-            </div>
-            @endif
         </div>
         <div class="row">
             <div class="label-title">Description</div>
@@ -139,7 +131,6 @@
 
     document.querySelectorAll('.countdown-timer').forEach(function (el) {
 		const targetTime = new Date(el.dataset.target).getTime();
-
 		const timer = setInterval(function () {
 			const now = new Date().getTime();
 			const distance = targetTime - now;
@@ -161,7 +152,6 @@
 				} else {
 					output = `${seconds} Second${seconds !== 1 ? 's' : ''}`;
 				}
-
 				el.innerText = output;
 			}
 		}, 1000);

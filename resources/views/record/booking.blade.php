@@ -38,18 +38,27 @@
                             </tr>
                             @else
                             @foreach($records as $record)
-                            @php
-                                $countdown = $record->product->created_at->copy()->addHours(2);
-                            @endphp
                             <tr>
                                 <td>{{ $record->product->product_name ?? '-' }} </td>
-                                <td>{{ $record->status ?? '-' }}    </td>
+                                @if($record->created_at->lt(\Carbon\Carbon::now()->subHours(2)))
+                                <td>{{ $record->status ?? '-' }}</td>
+                                @else
+                                <td>Processing</td>
+                                @endif
                                 <td class="text-center">{{ number_format($record->booking_amount ?? 0,2,'.',',') }}</td>
                                 <td class="text-center">{{ $record->number ?? '-' }}</td>
-                                <td class="text-center">{{ isset($record->final_amount) ? number_format($record->final_amount,2,'.',',') : '-' }}</td>
-                                <td class="text-center countdown-timer" data-id="{{ $record->id }}" data-target="{{ $countdown->format('Y-m-d H:i:s') }}"></td>
+                                <td class="text-center">{{ isset($record->final_payment) ? number_format($record->final_payment,2,'.',',') : '-' }}</td>
+                                @if(isset($record->countdown) && ($record->status == "Waiting for final payment" || $record->status == "Processing"))
+                                <td class="text-center countdown-timer" data-id="{{ $record->id }}" data-target="{{ $record->countdown }}"></td>
+                                @else
+                                <td class="text-center">-</td>
+                                @endif
                                 <td class="text-center">{{ $record->created_at->format('y/m/d H:i:s') }}</td>
+                                @if($record->status == "Waiting for final payment" && $record->created_at->lt(\Carbon\Carbon::now()->subHours(2)))
+                                <td class="text-center"><a href="{{ route('final_payment',['booking'=>$record->id]) }}" style="color:white;text-decoration:none;background:#0072ff;border-radius:50px;padding:3px 6px" >To Pay</a></td>
+                                @else
                                 <td class="text-center"></td>
+                                @endif
                             </tr>
                             @endforeach
                             @endif
