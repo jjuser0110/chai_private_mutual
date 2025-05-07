@@ -45,7 +45,8 @@ class User extends Authenticatable
         'nric_no',
         'nric_front',
         'nric_back',
-        'setup'
+        'setup',
+        'is_verified'
     ];
 
     /**
