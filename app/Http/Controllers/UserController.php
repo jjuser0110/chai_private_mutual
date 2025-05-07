@@ -13,6 +13,7 @@ use App\Models\UserShopPointHistory;
 use App\Models\UserScore;
 use App\Models\Order;
 use App\Models\Withdraw;
+use App\Models\InvitationCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -68,14 +69,15 @@ class UserController extends Controller
                 throw new Exception($validator->errors()->first());
             }
 
-            $upline = User::where('invitation_code',$request->invitation_code)->first();
-            if(!isset($upline)){
+            $invitation_code = InvitationCode::where('code',$request->invitation_code)->where('user_id',null)->first();
+            if(!isset($invitation_code)){
                 throw new Exception('Invalid invitation code');
             }
+            // dd("A");
 
-            $request->merge(['upline'=>$upline->id,'invitation_code'=>$this->createInvitationCode(),'name'=>$request->username,'role_id'=>3,'password'=>Hash::make($request->password)]);
+            $request->merge(['name'=>$request->username,'role_id'=>3,'password'=>Hash::make($request->password)]);
             $user = User::create($request->all());
-
+            $invitation_code->update(['user_id'=>$user->id]);
             Auth::login($user);
             return response()->json(['success'=>true,'message'=>'Register successful']);
         }
