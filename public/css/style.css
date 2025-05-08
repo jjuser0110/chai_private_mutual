@@ -2334,17 +2334,17 @@ display: none;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23fff'/%3E%3C/svg%3E");
 }
 
-#form-project .label{
+#form-project .label, #form-project-category .label{
     margin-bottom: 1rem !important;
     text-align: left !important;
     color: rgba(33, 37, 41, .75) !important
 }
 
-#form-project .input-group{
+#form-project .input-group, #form-project-category .input-group{
     margin-bottom: 1.5rem !important;
 }
 
-#form-project .input-group-text{
+#form-project .input-group-text, #form-project-category .input-group-text{
     border-radius: 25px;
     background: none;
     border-right: none;
@@ -2352,7 +2352,7 @@ display: none;
     border-bottom-right-radius: 0;
 }
 
-#form-project .form-control {
+#form-project .form-control, #form-project-category .form-control {
     border-radius: 25px;
     padding: .75rem;
     border-left: 0;
