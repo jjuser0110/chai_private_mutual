@@ -20,7 +20,7 @@
     <div class="project-category-tabs">
         <div class="list-group">
             @foreach($categories as $category)
-            <div class="list-group-item" onclick="$('#input-project-category').val({{ $category->id }});openModal('modal-project-category')">
+            <div class="list-group-item" onclick="$('#input-project-category').val({{ $category->id }});$('#modal-project-category #password').val('');openModal('modal-project-category')">
                 <div class="icon">
                     <img src="{{ env('BACKEND_URL') }}/storage/{{ $category->icon_path }}" alt="{{ $category->category_name }}">
                 </div>

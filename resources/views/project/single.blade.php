@@ -20,6 +20,7 @@
 			e.stopPropagation();
 		}
 	});
+	$('#modal-project-password #password').val('');
     openModal('modal-project-password');
     $('#form-project').off('submit').on('submit', function(e) {
 		e.preventDefault();

@@ -173,10 +173,10 @@ class ProjectController extends Controller
 
             $dup = 0;
             if($product->product_type == 'booking'){
-                $dup = Booking::where('user_id',Auth::user()->id)->where('product_id',$product->id)->count();
+                $dup = Booking::where('user_id',Auth::user()->id)->where('product_id',$product->id)->where('status','Running')->count();
             }
             else{
-                $dup = JoinRecord::where('user_id',Auth::user()->id)->where('product_id',$product->id)->count();
+                $dup = JoinRecord::where('user_id',Auth::user()->id)->where('product_id',$product->id)->where('status','Running')->count();
             }
             if($dup > 0){
                 throw new Exception('You already invest this project before.');
