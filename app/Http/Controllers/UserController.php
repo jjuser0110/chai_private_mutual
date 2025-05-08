@@ -618,7 +618,7 @@ class UserController extends Controller
 
     public function load_balance(Request $request){
         try{
-            $data = MoneyRecord::where('user_id',Auth::user()->id)->get();
+            $data = MoneyRecord::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
         }
         catch(Exception $e){
@@ -628,7 +628,7 @@ class UserController extends Controller
 
     public function load_score(Request $request){
         try{
-            $data = UserScore::where('user_id',Auth::user()->id)->get();
+            $data = UserScore::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
         }
         catch(Exception $e){
