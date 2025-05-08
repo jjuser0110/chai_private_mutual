@@ -562,9 +562,7 @@ class UserController extends Controller
             if(!isset($request->booking)){
                 throw new Exception('Failed to fetch booking details, please try again.');
             }
-    
             $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Waiting for final payment')->first();
-    
             if(!isset($booking)){
                 throw new Exception('Failed to fetch booking details, please try again.');
             }
@@ -594,8 +592,6 @@ class UserController extends Controller
             DB::rollback();
             return response()->json(['success'=>false,'message'=>$e->getMessage()]);
         }
-      
-
 
         if (request()->ajax()) {
             $view = view('final_payment',compact('booking'))->renderSections();
@@ -622,7 +618,7 @@ class UserController extends Controller
 
     public function load_balance(Request $request){
         try{
-            $data = UserShopPointHistory::where('user_id',Auth::user()->id)->get();
+            $data = MoneyRecord::where('user_id',Auth::user()->id)->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
         }
         catch(Exception $e){

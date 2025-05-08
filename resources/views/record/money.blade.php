@@ -109,15 +109,15 @@
                         response.data.forEach(item => {
                             let row = document.createElement('tr');
                             if(item.score >= 80){
-                                $color = 'success';
+                                color = '#0faf00';
                             }
                             else if(item.score >= 40 && item.score < 80){
-                                $color = 'warning';
+                                color = '#daa207';
                             }
                             else{
-                                $color = 'danger';
+                                color = '#ff5252';
                             }
-                            row.innerHTML = `<td class="${color}">${item.score ?? '-'}</td><td class="text-center ${color}">${item.value ?? '-'}</td> <td class="text-end">${formatDate(item.created_at)}</td>`;
+                            row.innerHTML = `<td style="color:${color}">${item.score ?? '-'}</td><td class="text-center" style="color:${color}">${item.value ?? '-'}</td> <td class="text-end">${formatDate(item.created_at)}</td>`;
                             tbody.appendChild(row);
                         });
                     }
@@ -158,7 +158,7 @@
                     else{ 
                         response.data.forEach(item => {
                             let row = document.createElement('tr');
-                            row.innerHTML = `<td style="text-transform:capitalize">${item.type ?? '-'}</td><td class="text-center">${formatNumber(item.amount ?? 0)}</td><td class="text-center">${formatNumber(item.final_amount ?? 0)}</td><td class="text-end">${formatDate(item.created_at)}</td>`;
+                            row.innerHTML = `<td style="text-transform:capitalize">${item.type ?? '-'}</td><td class="text-center">${formatNumber(item.amount ?? 0)}</td><td class="text-center">${formatNumber(item.after_amount ?? 0)}</td><td class="text-end">${formatDate(item.created_at)}</td>`;
                             tbody.appendChild(row);
                         });
                     }
