@@ -28,12 +28,12 @@
             </div>
             <div class="data-item">
                 <div class="data-item-title">Earning Yield</div>
-                <div class="data-item-content">{{ number_format($project->earning_yield,2,'.',',') }}{{ $project->earning_yield_unit ?? '-' }}</div>
+                <div class="data-item-content">{{ $project->earning_yield?? "-" }}</div>
             </div>
             
             <div class="data-item">
                 <div class="data-item-title">Project Deadline</div>
-                <div class="data-item-content">{{ $project->project_deadline ?? '-' }} {{ $project->project_deadline_unit ?? '-' }}</div>
+                <div class="data-item-content">{{ $project->project_deadline ?? '-' }} </div>
             </div>
             <!-- @if(strtolower($project->product_type) == 'normal')
             @else
