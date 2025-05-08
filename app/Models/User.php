@@ -103,14 +103,29 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Booking')->orderBy('created_at','DESC');
     }
 
+    public function pending_bookings()
+    {
+        return $this->hasMany('App\Models\Booking')->whereNotIn('status',['Finished','Cancelled'])->orderBy('created_at','DESC');
+    }
+
     public function join_records()
     {
         return $this->hasMany('App\Models\JoinRecord')->orderBy('created_at','DESC');
     }
 
+    public function pending_join_records()
+    {
+        return $this->hasMany('App\Models\JoinRecord')->where('status','Running')->orderBy('created_at','DESC');
+    }
+
+    public function pending_withdraws()
+    {
+        return $this->hasMany('App\Models\Withdraw')->where('status','Pending')->orderBy('created_at','DESC');
+    }
+
     public function getUnavailableFundAttribute()
     {
-        return round($this->bookings()->sum('total_payment')+$this->join_records()->sum('investment_amount'),2);
+        return round($this->pending_bookings()->sum('total_payment')+$this->pending_join_records()->sum('investment_amount')+$this->pending_withdraws()->sum('amount'),2);
     }
 
     public function getTotalMoneyAttribute()
