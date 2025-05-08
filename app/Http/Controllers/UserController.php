@@ -543,7 +543,7 @@ class UserController extends Controller
 
     public function final_payment(Request $request)
     {
-        $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Waiting for final payment')->first();
+        $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Pending Final Payment')->first();
         if (request()->ajax()) {
             $view = view('final_payment',compact('booking'))->renderSections();
             return response()->json([
@@ -562,7 +562,7 @@ class UserController extends Controller
             if(!isset($request->booking)){
                 throw new Exception('Failed to fetch booking details, please try again.');
             }
-            $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Waiting for final payment')->first();
+            $booking = Booking::with('product')->where('id',$request->booking)->where('user_id',Auth::user()->id)->where('status', 'Pending Final Payment')->first();
             if(!isset($booking)){
                 throw new Exception('Failed to fetch booking details, please try again.');
             }
@@ -576,7 +576,7 @@ class UserController extends Controller
             }
             $credit_before = Auth::user()->available_fund;
             Auth::user()->decrement('available_fund', $booking->final_payment);
-            $booking->update(['status'=>'Complete final payment']);
+            $booking->update(['status'=>'Finished']);
             MoneyRecord::create([
                 'user_id'=>Auth::user()->id,
                 'type'=>'Booking',
