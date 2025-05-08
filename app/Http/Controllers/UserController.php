@@ -519,7 +519,7 @@ class UserController extends Controller
     public function load_join(Request $request){
         try{
             $type = !in_array(strtolower($request->type),['running','finished']) ? 'running' : strtolower($request->type);
-            $data = JoinRecord::with('product')->where('user_id',Auth::user()->id)->where('status', ucfirst($type))->get();
+            $data = JoinRecord::with('product')->where('user_id',Auth::user()->id)->where('status', ucfirst($type))->orderBy('created_at','DESC')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded','type'=>$type]);
         }
         catch(Exception $e){
@@ -529,7 +529,7 @@ class UserController extends Controller
 
     public function booking_record()
     {
-        $records = Booking::where('user_id',Auth::user()->id)->get();
+        $records = Booking::where('user_id',Auth::user()->id)->orderBy('updated_at','DESC')->get();
         if (request()->ajax()) {
             $view = view('record.booking',compact('records'))->renderSections();
             return response()->json([
