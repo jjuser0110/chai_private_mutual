@@ -492,7 +492,7 @@ class UserController extends Controller
 
     public function withdraw_record()
     {
-        $withdraws = Withdraw::where('user_id',Auth::user()->id)->get();
+        $withdraws = Withdraw::where('user_id',Auth::user()->id)->orderBy('updated_at','DESC')->take('20')->get();
         if (request()->ajax()) {
             $view = view('record.withdraw', compact('withdraws'))->renderSections();
             return response()->json([
@@ -519,7 +519,7 @@ class UserController extends Controller
     public function load_join(Request $request){
         try{
             $type = !in_array(strtolower($request->type),['running','finished']) ? 'running' : strtolower($request->type);
-            $data = JoinRecord::with('product')->where('user_id',Auth::user()->id)->where('status', ucfirst($type))->orderBy('created_at','DESC')->get();
+            $data = JoinRecord::with('product')->where('user_id',Auth::user()->id)->where('status', ucfirst($type))->orderBy('created_at','DESC')->take('20')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded','type'=>$type]);
         }
         catch(Exception $e){
@@ -529,7 +529,7 @@ class UserController extends Controller
 
     public function booking_record()
     {
-        $records = Booking::where('user_id',Auth::user()->id)->orderBy('updated_at','DESC')->get();
+        $records = Booking::where('user_id',Auth::user()->id)->orderBy('updated_at','DESC')->take('20')->get();
         if (request()->ajax()) {
             $view = view('record.booking',compact('records'))->renderSections();
             return response()->json([
@@ -618,7 +618,7 @@ class UserController extends Controller
 
     public function load_balance(Request $request){
         try{
-            $data = MoneyRecord::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->get();
+            $data = MoneyRecord::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->take('20')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
         }
         catch(Exception $e){
@@ -628,7 +628,7 @@ class UserController extends Controller
 
     public function load_score(Request $request){
         try{
-            $data = UserScore::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->get();
+            $data = UserScore::where('user_id',Auth::user()->id)->orderBy('created_at','DESC')->take('20')->get();
             return response()->json(['success'=>true,'data'=>$data,'message'=>'Record loaded']);
         }
         catch(Exception $e){
