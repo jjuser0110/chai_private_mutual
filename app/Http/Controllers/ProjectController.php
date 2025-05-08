@@ -189,7 +189,8 @@ class ProjectController extends Controller
                     'product_id'=>$product->id,
                     'booking_amount'=>$amount,
                     'status'=>'Running',
-                    'countdown'=>Carbon::now()->addHours(48)->format('Y-m-d H:i:s')
+                    'countdown'=>Carbon::now()->addHours(48)->format('Y-m-d H:i:s'),
+                    'total_payment'=>$amount
                 ]);
                 $money_type_id = $booking_record->id;
                 $money_type = 'Booking';

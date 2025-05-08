@@ -576,7 +576,7 @@ class UserController extends Controller
             }
             $credit_before = Auth::user()->available_fund;
             Auth::user()->decrement('available_fund', $booking->final_payment);
-            $booking->update(['status'=>'Complete Final Payment']);
+            $booking->update(['status'=>'Complete Final Payment','total_payment'=>$booking->total_payment+$booking->final_payment]);
             MoneyRecord::create([
                 'user_id'=>Auth::user()->id,
                 'type'=>'Booking',
