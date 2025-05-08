@@ -14,8 +14,14 @@ class MoneyRecord extends Model
     protected $fillable = [
         'user_id',
         'type',
+        'type_id',
         'before_amount',
         'amount',
         'after_amount',
     ];
+    
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }
