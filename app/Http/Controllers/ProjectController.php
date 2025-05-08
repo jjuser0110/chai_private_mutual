@@ -13,6 +13,7 @@ use App\Models\Booking;
 use App\Models\ShopItem;
 use App\Models\FileAttachment;
 use App\Models\Order;
+use App\Models\MoneyRecord;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\RunningNumber;
@@ -130,6 +131,7 @@ class ProjectController extends Controller
 
     public function submit_investment(Request $request){
         try{
+            DB::beginTransaction();
             if(!isset($request->project)){
                 throw new Exception('Invalid project.');
             }
@@ -180,29 +182,46 @@ class ProjectController extends Controller
                 throw new Exception('You already invest this project before.');
             }
 
+            $credit_before = Auth::user()->available_fund;
             if($product->product_type == 'booking'){
-                Booking::create([
+                $booking_record = Booking::create([
                     'user_id'=>Auth::user()->id,
                     'product_id'=>$product->id,
                     'booking_amount'=>$amount,
-                    'status'=>'Pending'
+                    'status'=>'Running',
+                    'countdown'=>Carbon::now()->addHours(48)->format('Y-m-d H:i:s')
                 ]);
+                $money_type_id = $booking_record->id;
+                $money_type = 'Booking';
                 $message = 'Booking created successfully.';
                 $link = route('booking_record');
             }
             else{
-                JoinRecord::create([
+                $join_record = JoinRecord::create([
                     'user_id'=>Auth::user()->id,
                     'product_id'=>$product->id,
                     'investment_amount'=>$amount,
                     'status'=>'Running'
                 ]);
+                $money_type_id = $join_record->id;
+                $money_type = 'Join';
                 $message = 'Investment created successfully.';
                 $link = route('join_record');
             }
+            Auth::user()->decrement('available_fund', $amount);
+            MoneyRecord::create([
+                'user_id'=>Auth::user()->id,
+                'type'=>$money_type,
+                'type_id'=>$money_type_id,
+                'before_amount'=>$credit_before,
+                'amount'=>$amount,
+                'after_amount'=>Auth::user()->available_fund
+            ]);
+            DB::commit();
             return response()->json(['success'=>true,'message'=>$message,'link'=>$link ?? route('join_record') ]);
         }
         catch(Exception $e){
+            DB::rollback();
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

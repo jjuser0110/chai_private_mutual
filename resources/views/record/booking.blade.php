@@ -43,12 +43,12 @@
                                 @if($record->created_at->lt(\Carbon\Carbon::now()->subHours(2)))
                                 <td>{{ $record->status ?? '-' }}</td>
                                 @else
-                                <td>Processing</td>
+                                <td>Running</td>
                                 @endif
                                 <td class="text-center">{{ number_format($record->booking_amount ?? 0,2,'.',',') }}</td>
                                 <td class="text-center">{{ $record->number ?? '-' }}</td>
                                 <td class="text-center">{{ isset($record->final_payment) ? number_format($record->final_payment,2,'.',',') : '-' }}</td>
-                                @if(isset($record->countdown) && ($record->status == "Waiting for final payment" || $record->status == "Processing"))
+                                @if(isset($record->countdown) && ($record->status == "Waiting for final payment" || $record->status == "Running"))
                                 <td class="text-center countdown-timer" data-id="{{ $record->id }}" data-target="{{ $record->countdown }}"></td>
                                 @else
                                 <td class="text-center">-</td>

@@ -12,6 +12,7 @@ use App\Models\UserAddress;
 use App\Models\UserShopPointHistory;
 use App\Models\UserScore;
 use App\Models\Order;
+use App\Models\MoneyRecord;
 use App\Models\Withdraw;
 use App\Models\InvitationCode;
 use Illuminate\Support\Facades\Auth;
@@ -489,7 +490,6 @@ class UserController extends Controller
         }
     }
 
-    
     public function withdraw_record()
     {
         $withdraws = Withdraw::where('user_id',Auth::user()->id)->get();
@@ -576,9 +576,17 @@ class UserController extends Controller
             if(Auth::user()->available_fund < $booking->final_payment){
                 throw new Exception('Insufficient fund');
             }
-
+            $credit_before = Auth::user()->available_fund;
             Auth::user()->decrement('available_fund', $booking->final_payment);
             $booking->update(['status'=>'Complete final payment']);
+            MoneyRecord::create([
+                'user_id'=>Auth::user()->id,
+                'type'=>'Booking',
+                'type_id'=>$booking->id,
+                'before_amount'=>$credit_before,
+                'amount'=>$booking->final_payment,
+                'after_amount'=>Auth::user()->available_fund
+            ]);
             DB::commit();
             return response()->json(['success'=>true,'message'=>"Payment submmited"]);
         }
