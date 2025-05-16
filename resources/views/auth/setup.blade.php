@@ -4,7 +4,7 @@
 <div id="page-content" class="auth-page register-page">
 	<div class="page-header">
 		<div></div>
-		<div class="close-wrapper cursor-pointer" onclick="window.location.href='{{ route('logout') }}'">
+		<div class="close-wrapper cursor-pointer" onclick="loadPage('{{ route('account') }}')">
 			<i class="ri-close-circle-line"></i>
 		</div>
 	</div>

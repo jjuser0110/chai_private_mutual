@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
-Route::middleware(['ForceSetup'])->group(function() {
+//Route::middleware(['ForceSetup'])->group(function() {
     Auth::routes();
     Route::get('/home', [App\Http\Controllers\Controller::class, 'index'])->name('index');
     Route::get('/join', [App\Http\Controllers\Controller::class, 'join'])->name('join');
@@ -61,7 +61,7 @@ Route::middleware(['ForceSetup'])->group(function() {
     });
     Route::get('/faq', [App\Http\Controllers\Controller::class, 'faq'])->name('faq');
     Route::get('/about_us', [App\Http\Controllers\Controller::class, 'about_us'])->name('about_us'); 
-});
+//});
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/setup', [App\Http\Controllers\UserController::class, 'setup'])->name('setup');

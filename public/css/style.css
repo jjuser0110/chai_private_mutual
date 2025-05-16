@@ -2565,6 +2565,13 @@ display: none;
     font-size: 14px;
     margin-left: 15px;
     padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+#profile-verify-label.info{
+    background: #0072ff;
 }
 
 #profile-verify-label.success{

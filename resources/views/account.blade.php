@@ -15,9 +15,16 @@
                     </div>
                     <div class="label">Ordinary</div>
                 </div>
-                <div id="profile-verify-label" class="{{ Auth::user()->setup == 2 ? 'success' : 'warning' }}">
-                    {{ Auth::user()->getVerificationAttribute() }}
+                @if(Auth::user()->setup == 0)
+                <div id="profile-verify-label" class="info" onclick="window.location.href='{{ route('setup') }}'">
+                    Verify Profile 
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
                 </div>
+                @elseif(Auth::user()->setup == 1)
+                <div id="profile-verify-label" class="warning">Pending Verification...</div>
+                @elseif(Auth::user()->setup == 2)
+                <div id="profile-verify-label" class="success">Pending Verified</div>
+                @endif
             </div>
         </div>
         <div class="account-funds">
