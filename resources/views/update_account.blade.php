@@ -13,12 +13,12 @@
                 <div class="input-group-text">
                     <span class="icon">
                         <div class="image-icon menu-item-icon">
-                            <img src="{{ asset('img/profile/mobile.png') }}" alt="Mobile"/>
+                            <img src="{{ asset('img/profile/mobile.png') }}" alt="Mobile" />
                         </div>
                     </span>
                     <span>Mobile</span>
                 </div>
-                <input class="form-control" type="number" name="contact_no" value="{{ Auth::user()->contact_no ?? ''}}">
+                <input class="form-control" type="number" name="contact_no" value="{{ Auth::user()->contact_no ?? ''}}" readonly>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                     </span>
                     <span>Name</span>
                 </div>
-                <input class="form-control" type="text" name="name" value="{{ Auth::user()->name ?? ''}}">
+                <input class="form-control" type="text" name="name" value="{{ Auth::user()->name ?? ''}}" readonly>
             </div>
         </div>
 
@@ -50,16 +50,19 @@
                     </span>
                     <span>ID Card</span>
                 </div>
-                <input class="form-control" type="text" name="id_card" value="{{ Auth::user()->id_card ?? ''}}">
+                <input class="form-control" type="text" name="nric_no" value="{{ Auth::user()->nric_no ?? ''}}" readonly>
             </div>
         </div>
         
         <div class="divider"></div>
         
         <div class="btn-wrapper" style="padding-left:0.5rem;padding-right:0.5rem">
-            <button class="btn btn-md btn-primary w-100 text-uppercase" style="margin-top:1rem" type="submit">
+            <!-- <button class="btn btn-md btn-primary w-100 text-uppercase" style="margin-top:1rem" type="submit">
                 <span class="me-3">Submit</span>
-            </button>
+            </button> -->
+            <a class="btn btn-md btn-primary w-100 text-uppercase" style="margin-top:1rem" href="{{route('account')}}">
+                <span class="me-3">Back</span>
+            </a>
         </div>
     </div>
 </div>
