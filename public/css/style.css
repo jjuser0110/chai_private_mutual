@@ -2648,3 +2648,7 @@ display: none;
     }
 }
 
+#table-withdraw-wrapper .table-sm{
+    margin-bottom:150px !important;
+    overflow: auto !important
+}

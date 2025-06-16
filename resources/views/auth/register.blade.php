@@ -56,7 +56,7 @@
 			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
 			success: function(response) {
 				if(response.success == true){
-					window.location.href = "{{ route('index') }}"
+					window.location.href = "{{ route('login') }}"
 				}
 				else{
 					showToast('error','Failed',response.message)

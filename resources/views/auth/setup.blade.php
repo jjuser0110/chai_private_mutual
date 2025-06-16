@@ -22,11 +22,7 @@
 
         <div class="input-group">
 			<span class="input-group-text"><i class="ri-profile-line"></i></span>
-			<input style="border-right:none;padding-right:0;width:6ch;max-width:6ch;" maxlength="6" type="text" id="nric-no" name="nric_no_front" class="form-control" placeholder="000000">
-			<span class="input-group-text" style="padding-left:0.1rem;padding-right:0.1rem">-</span>
-			<input style="border-right:none;padding-right:0;width:2ch;max-width:2ch;" maxlength="2" type="text" id="nric-no" name="nric_no_mid" class="form-control" placeholder="00">
-			<span class="input-group-text" style="padding-left:0.1rem;padding-right:0.1rem">-</span>
-			<input style="width:4ch;;" type="text" id="nric-no" maxlength="4" name="nric_no_end" class="form-control" placeholder="0000">
+			<input type="text" id="nric-no" name="nric_no" class="form-control" placeholder="NRIC e.g 000101238888"	onblur="formatNRIC(this)" onfocus="removeDashes(this)">
 		</div>
 
         <div class="input-group">
@@ -81,6 +77,20 @@
 @section('custom')
 <script>
     $('.menu-item').removeClass('active');
+
+	function formatNRIC(input) {
+		let value = input.value.replace(/\D/g, '');
+
+		if (value.length === 12) {
+			input.value = value.replace(/^(\d{6})(\d{2})(\d{4})$/, '$1-$2-$3');
+		} else {
+			input.value = value;
+		}
+	}
+
+	function removeDashes(input) {
+		input.value = input.value.replace(/-/g, '');
+	}
 
 	@if(Auth::user()->setup == 4)
 	$('#form-resetup').off('submit').on('submit', function(e) {

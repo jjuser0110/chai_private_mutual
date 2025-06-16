@@ -79,7 +79,7 @@ class UserController extends Controller
             $request->merge(['name'=>$request->username,'role_id'=>3,'password'=>Hash::make($request->password)]);
             $user = User::create($request->all());
             $invitation_code->update(['user_id'=>$user->id]);
-            Auth::login($user);
+            //Auth::login($user);
             return response()->json(['success'=>true,'message'=>'Register successful']);
         }
         catch(Exception $e){
@@ -143,30 +143,21 @@ class UserController extends Controller
             $validator = Validator::make($request->all(),[
                 'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
                 'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
-                'nric_no_front' => 'required|digits:6',
-                'nric_no_mid' => 'required|digits:2',
-                'nric_no_end' => 'required|digits:4',
                 'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 'email' => 'required|email',
                 'contact_no' => 'required|numeric',
-                'fund_password' => 'required|min:8',
+                'fund_password' => 'required|min:10',
                 ], [
                 'nric_front.required' => 'Front NRIC image is required.',
                 'nric_front.image' => 'Front NRIC must be a valid image.',
                 'nric_back.required' => 'Back NRIC image is required.',
                 'nric_back.image' => 'Back NRIC must be a valid image.',
-                'nric_no_front.required' => 'Invalid NRIC.',
-                'nric_no_front.digits' => 'Invalid NRIC.',
-                'nric_no_mid.required' => 'Invalid NRIC.',
-                'nric_no_mid.digits' => 'Invalid NRIC.',
-                'nric_no_end.required' => 'Invalid NRIC.',
-                'nric_no_end.digits' => 'Invalid NRIC.',
                 'name.required' => 'Name is required.',
                 'name.regex' => 'Name must contain only letters and spaces.',
                 'email.required' => 'Email is required.',
                 'email.email' => 'Please enter a valid email address.',
                 'fund_password.required' => 'Fund password is required.',
-                'fund_password.min' => 'Fund password must be at least 8 characters long.',
+                'fund_password.min' => 'Fund password must be at least 10 characters long.',
                 'contact_no.required'=>'Contact no is required.',
                 'contact_no.numeric'=>'Invalid contact no.'
                 ]);
@@ -174,7 +165,16 @@ class UserController extends Controller
             if ($validator->fails()) {
                 throw new Exception($validator->errors()->first()); 
             }
-            
+
+            if(!isset($request->nric_no)){
+                throw new Exception('NRIC is required.');
+            }
+
+            $nric_no = str_replace('-', '', $request->nric_no);
+            if(strlen($nric_no) < 12){
+                throw new Exception('Invalid NRIC.');
+            }
+
             $timestamp = now()->timestamp;
             if ($request->hasFile('nric_front')) {
                 $frontImage = $request->file('nric_front');
@@ -207,7 +207,7 @@ class UserController extends Controller
                 'nric_front'=>$timestamp."_front." . $frontImage->getClientOriginalExtension(),
                 'nric_back'=>$timestamp."_back." . $backImage->getClientOriginalExtension(),
                 'setup'=>1,
-                'nric_no'=>$request->nric_no_front.'-'.$request->nric_no_mid.'-'.$request->nric_no_end,
+                'nric_no'=>preg_replace('/^(\d{6})(\d{2})(\d{4})$/', '$1-$2-$3', $nric_no)
             ]);
             DB::commit();
             return response()->json(['success'=>true,'message'=>'Profile has been updated.']);

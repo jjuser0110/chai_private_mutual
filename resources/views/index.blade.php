@@ -57,7 +57,13 @@
                         <div class="card-title">{{ $item->product_name }}</div>
                         <div class="card-content">Belong to: {{ $project['name'] }}</div>
                         <div class="card-content">User Level: {{ $item->user_level ?? '-'}}</div>
-                        <div class="card-content">Booking Amount: MYR {{ number_format($item->product_price,2,'.',',') }}</div>
+                        @if($item->product_type == 'normal')
+                        <div class="card-content">Join Amount Start From:</div>
+                        <div class="card-content" style="color:white; font-size:14px">MYR {{ number_format($item->investment_amount,2,'.',',') }}+</div>
+                        @else
+                        <div class="card-content">Booking Amount:</div>
+                        <div class="card-content" style="color:white; font-size:14px">MYR {{ number_format($item->product_price,2,'.',',') }}</div>
+                        @endif
                         <div class="progress">
                             <div class="progress-bar" style="width:{{ $item->product_percentage }}%;">
                                 <div class="label">{{ $item->product_percentage }}%</div>

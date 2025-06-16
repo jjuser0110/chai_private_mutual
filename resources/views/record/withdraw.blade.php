@@ -6,9 +6,9 @@
     <div class="title">Withdraw Record</div>
 </div>
 
-<div id="page-content" class="history-page">
+<div id="page-content" class="history-page" style="padding-bottom:0">
     <div id="table-withdraw-wrapper" class="table-wrapper">
-        <div class="custom-datatable table-sm">
+        <div class="custom-datatable table-sm table-withdraw-record">
             <div class="flex-grow-1 mb-3">
                 <div class="b-overlay-wrap position-relative">
                     <table class="table b-table table-dark mb-0">
