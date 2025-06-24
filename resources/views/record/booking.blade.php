@@ -57,7 +57,7 @@
                                 @if($record->status == "Pending Final Payment" && $record->created_at->lt(\Carbon\Carbon::now()->subHours(2)))
                                 <td class="text-center"><a href="{{ route('final_payment',['booking'=>$record->id]) }}" style="color:white;text-decoration:none;background:#0072ff;border-radius:50px;padding:3px 6px" >To Pay</a></td>
                                 @else
-                                <td class="text-center"></td>
+                                <td class="text-center">@if($record->dividend_amount > 0) dividen {{number_format($record->dividend_amount ?? 0,2,'.',',')}} @endif</td>
                                 @endif
                             </tr>
                             @endforeach
