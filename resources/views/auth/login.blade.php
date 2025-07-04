@@ -3,7 +3,7 @@
 @section('content')
 <div id="page-content" class="auth-page login-page">
 	<div class="page-header">
-		<a class="customer-service" target="_blank" href="#">
+		<a class="customer-service" href="#" onclick="livechat();return false;" id="livechatID">
 			<i class="ri-customer-service-line"></i>
 		</a>
 		<div class="close-wrapper cursor-pointer" onclick="loadPage('{{ route('index') }}')">

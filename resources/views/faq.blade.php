@@ -10,87 +10,90 @@
     <div class="faq-content" style="padding:10px;color:rgb(136, 136, 136);font-size:12px;line-height:1.5;">
         <p>1. What is HLG Private Placement?</p>
         <p>
-            This is a private placement platform owned by HLGroup. It has a certain threshold for multiple investments. It is only open and available to a certain number of certified people who have gone through a preset filter. The investors’ money will only be used in corporate and municipal projects that require external funding. Completed projects will have a dividend payout and will be promptly refunded if the ongoing project fails.
+            HLG Private Placement is an exclusive investment platform owned and operated by HLGroup. It maintains a selective entry threshold, available only to a limited number of certified investors who have passed a pre-qualification screening process.
+            <br><br>
+            Investor funds are allocated solely to carefully vetted corporate and municipal projects that require external financing. Upon successful project completion, investors receive dividend payouts as stipulated. In the event that a project does not proceed as planned, the principal capital will be promptly refunded in accordance with the platform’s risk management protocols.
         </p>
         
-        <p>2. For some higher-quality projects, an appointment for investors to preview the project will be made before external fundraising;</p>
+        <p>2. What Is a Credit Score?</p>
         <p>
-            During the preview period, you can make an appointment to subscribe. After the subscription is successfully processed, the platform will selectively distribute shares to platform users, which is a minimum of one share.
+            A credit score represents the platform’s comprehensive assessment of a user's investment eligibility and credibility. Investors with higher credit scores are granted access to premium private placement projects—such as architecture investments—while those with lower scores may only participate in entry-level projects, such as NFTs or digital collectibles.
         </p>
         
-        <p>3. Why am i given a larger number of shares?</p>
+        <p>3. Is the Platform Safe? Will My Information Be Disclosed?</p>
         <p>
-            Depending on the time of a project’s subscription, the amount of shares obtained from the project will also be different, and the subscription will only be successful at one share.
+            Yes, the platform ensures strict confidentiality. Private placement requires a higher standard of investor screening, and all participants are bound by non-disclosure agreements (NDAs). Personal data is protected under advanced encryption protocols, and multi-layered payment systems are used to safeguard both privacy and funds.<br>
+            (Note: High-net-worth individuals often prefer discreet platforms to avoid overexposure or unnecessary taxation.)
         </p>
         
-        <p>4. What is a credit score?</p>
+        <p>4. Project Preview for Selected Investors</p>
         <p>
-            Credit score is the platform’s overall evaluation of a user’s qualification. The availability to participate in higher-quality private placement projects are based on a user’s credit score, a user with a high credit score may join higher-quality projects such as architectural private placement projects, while a user with low credit score may only join lower threshold projects such as NFT.
+            For premium-grade projects, a private preview session may be arranged for qualified investors prior to the official launch of external fundraising. This ensures informed decision-making and early access to high-potential opportunities.
         </p>
         
-        <p>5. What is the difference between public placement and private placement?</p>
+        <p>5. Is Private Placement Legal?</p>
         <p>
-            The criteria for fundraising are different. Public placement is a fundraising platform for the general public, which has a lower threshold but bigger sample capacity. The objective of private placement, is to target a smaller, pre-selected audience with a higher threshold of investment.
+            Yes, private placement is fully legal. Its primary purpose is to support targeted enterprises and government-backed initiatives through controlled fundraising. Investors benefit from profit-sharing while contributing to public development. All operations comply with the Capital Markets and Services Act (CMSA) and are legally endorsed.
         </p>
         
-        <p>6. Is the concept of private placement illegal?</p>
+        <p>6. Why Am I Allocated a Larger Number of Shares?</p>
         <p>
-            The act of private placement is completely legal. The purpose is to support the cultivation of certain enterprises and governmental resources, increase development in public welfare while handing out profits to singular investors. It has received approval and legal backing as such in CMS Law.
+            The number of shares allocated depends on the subscription timing. Early subscribers often receive more favorable allocations. Each successful subscription secures only one unit of share; allocations vary based on availability at the time of entry.
         </p>
         
-        <p>7. Purpose of the platform’s shop and prices;</p>
+        <p>7. What Is the Difference Between Public Placement and Private Placement?</p>
         <p>
-            The items that can be purchased in the platform’s shop view are on purchasable using the points given to users instead of direct currency.
+            Public placements are open to the general public, featuring lower investment thresholds and wider audience reach. In contrast, private placements are limited to a pre-screened group of investors and require a higher qualification threshold. The objective is to maintain exclusivity, investor protection, and project quality control.
         </p>
         
-        <p>8. Is this platform safe? Will my information be disclosed?</p>
+        <p>8. Purpose of the Platform’s Shop and Pricing System</p>
         <p>
-            Yes. The Confidentiality Of Private Placement Cannot Be Compared To That Of Public Placement. Those Who Can Participate Are Of Refined Status And Quality-checked, The Platform Has A Confidentiality Agreement In Place That Protects Users' Personal Information Rights. The Platform Uses Different Payment Methods To Protect The Privacy Of Investors And The Safety Of Their Funds;
-        </p>
-        <p>
-            (High Nett-worth Individuals Do Not Want The Government To Know Their Actual Asset-value To Avoid Being Taxed)
+            The platform’s marketplace allows users to redeem exclusive items using accumulated points. These points are issued as part of the reward and participation system and cannot be purchased with real currency, ensuring fairness and internal ecosystem integrity.
         </p>
         
-        <p>9. Will my principal not be refunded if the fundraising is unsuccessful or the project fails?</p>
+        <p>9. Will My Principal Be Refunded If the Fundraising Fails or the Project Collapses?</p>
         <p>
-            If the fundraising is unsuccessful or the project fails, the deposit will be refunded. Before investing in a project, the platform will sign an investor principal protection agreement with the investor and your principal will be refunded if the project fails
+            Yes. In the event of unsuccessful fundraising or project failure, your initial capital will be fully refunded. Prior to investment, the platform enters into a Principal Protection Agreement with each investor to legally safeguard the original deposit against loss.
         </p>
         
-        <p>10. What is an NFT?</p>
+        <p>10. What Is the Metaverse?</p>
         <p>
-            NFTs or Non-Fungible Tokens are a kind of cryptocurrency that represents a one-of-a-kind digital asset or unique piece of artwork. Fiat and cryptocurrencies are mainly used for transactional purposes and are fungible, which means each unit can be interchanged for certain values.
+            The Metaverse is an immersive digital environment that integrates work, entertainment, social interaction, and commerce into one seamless experience.
+        </p>
+        <p>
+            Corporations like Meta (formerly Facebook) are developing metaverse platforms where users interact through avatars in fully virtual landscapes—similar to the concept portrayed in Ready Player One.
+        </p>
+        <p>
+            Digital real estate and assets within the metaverse can be bought, sold, or traded using cryptocurrencies or other digital currencies.
         </p>
         
-        <p>11. What is the Metaverse?</p>
+        <p>11. What Is an NFT?</p>
         <p>
-            A metaverse is an improved digital environment where it is possible to move seamlessly between work, play, shopping, socializing and creativity in one digital landscape.
+            NFTs (Non-Fungible Tokens) are unique digital assets authenticated via blockchain technology. Unlike cryptocurrencies such as Bitcoin, NFTs are not interchangeable and often represent exclusive artwork, collectibles, or digital property, each holding a distinct value in the digital economy.
         </p>
-        <p>
-            What form that landscape will take is a subject of debate. Firms such as Meta (Facebook) are investing heavily in an immersive experience, where users with wearable hardware discard reality for a purely virtual world, interacting via avatars – the basis for the ‘Oasis’ depicted in Ernest Cline’s novel, Ready Player One.
-        </p>
-        <p>
-            The metaverse can be valued at a certain amount of digital currency and can be bought, traded, or sold using external sources.
-        </p>
-
         <br>
-        <p>What is Credit Score?</p>
+        <p>12. What Is Credit Score?</p>
+        <p>📌 Credit Score System Overview:</p>
         <ul class="ps-3">
-            <li>Credit value introduction After Register as a HLFund User, the initial credit value is 80 Score. The credit limit is 100 Score.</li>
-            <li>Joining 10 Project in HLFund recruitment activity and completing it, you can contact customer service to redeem 1 credits Score.</li>
-            <li>When the credit value reaches 100 Score, User account will be allowing to join High Com Project Once a month.</li>
+            <li>Upon registering as an HLFund user, you will be assigned an initial credit score of 80 points.</li>
+            <li>The maximum credit score is 100 points.</li>
         </ul>
-
-        <p>Reminders</p>
-        <ol class="ps-3">
-            <li>User whose credit value is less than 60 Score will affect the Functions.</li>
-            <li>Once any User is detected to take advantage of illegal operations, the corresponding credit value will be deducted.</li>
-        </ol>
-
-        <p>Points Description</p>
-        <ol class="ps-3">
-            <li>Redemption Eligibility: Ordinary member and above and participate redemption from integral shop</li>
-            <li>Every RM 500 of recharge will accumulate 5 Point</li>
-        </ol>
+        <p>🧩 How to Earn Credit Points:</p>
+        <ul class="ps-3">
+            <li>Successfully participate in 10 HLFund recruitment projects, then contact customer support to redeem 1 credit point.</li>
+            <li>When your credit score reaches 100 points, your account will be eligible to participate in High-Commission Projects once per month.</li>
+        </ul>
+        <p>🔔 Important Reminders:</p>
+        <ul class="ps-3">
+            <li>Users with a credit score below 60 points may experience restricted access to certain platform features.</li>
+            <li>Any fraudulent or manipulative behavior will result in an immediate deduction of credit points.</li>
+        </ul>
+        <p>💎 Points System Description:</p>
+        <ul class="ps-3">
+            <li>Redemption Eligibility: Available to Ordinary Members and above.</li>
+            <li>Points can be redeemed in the Rewards Shop for exclusive benefits.</li>
+            <li>For every RM 500 deposited, you will receive 5 points automatically.</li>
+        </ul>
         <div class="divider"></div>
         <div class="divider"></div>
     </div>

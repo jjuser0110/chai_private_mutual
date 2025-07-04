@@ -3,7 +3,7 @@
 @section('content')
 <div id="header">
     <div class="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo" height="20"></div>
-    <a target="_blank" class="customer-service" href="#"><i class="ri-customer-service-2-line ri-xl"></i></a>
+    <a target="_blank" class="customer-service" href="#" onclick="livechat();return false;" id="livechatID"><i class="ri-customer-service-2-line ri-xl"></i></a>
 </div>
 <div id="page-content">
     <!-- Slider -->
@@ -24,8 +24,8 @@
 
         <div class="swiper-container swiper" id="swiper-notice">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><span>Welcome to Hong Leong Mutual Asia</span></div>
-                <div class="swiper-slide"><span>Welcome to Hong Leong Mutual Asia</span></div>
+                <div class="swiper-slide"><span>Welcome to Hong Leong Private Placement</span></div>
+                <div class="swiper-slide"><span>Welcome to Hong Leong Private Placement</span></div>
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
         <a href="#" onclick="loadPage('news')" class="item"><div class="icon"><i class="ri-newspaper-line"></i></div><span>News</span></a>
         <a href="#" onclick="loadPage('join')" class="item"><div class="icon"><i class="ri-menu-line"></i></div><span>Join</span></a>
         <a href="#" onclick="loadPage('withdraw')" class="item"><div class="icon"><i class="ri-wallet-fill"></i></div><span>Withdraw</span></a>
-        <a href="#" class="item"><div class="icon"><i class="ri-customer-service-line"></i></div><span>Customer Service</span></a>
+        <a href="#" onclick="livechat();return false;" id="livechatID" class="item"><div class="icon"><i class="ri-customer-service-line"></i></div><span>Customer Service</span></a>
     </div>
 
     <div class="divider"></div>
