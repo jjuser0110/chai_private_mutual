@@ -22,7 +22,8 @@ Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
     Route::get('/product/{id}', [App\Http\Controllers\ShopController::class, 'view'])->name('single_product');
     Route::get('/login', [App\Http\Controllers\Controller::class, 'login'])->name('login');
     Route::get('/register', [App\Http\Controllers\Controller::class, 'register'])->name('register');
-    Route::get('/news', [App\Http\Controllers\Controller::class, 'news'])->name('news');
+    Route::get('/news', [App\Http\Controllers\NewsController::class, 'news'])->name('news');
+    Route::get('/news/{id}', [App\Http\Controllers\NewsController::class, 'single'])->name('single_news');
     Route::post('/submit_register', [App\Http\Controllers\UserController::class, 'submit_register'])->name('submit_register');
     Route::post('/submit_login', [App\Http\Controllers\UserController::class, 'submit_login'])->name('submit_login');
 
