@@ -22,7 +22,7 @@
 
         <div class="input-group">
 			<span class="input-group-text"><i class="ri-profile-line"></i></span>
-			<input type="text" id="nric-no" name="nric_no" class="form-control" placeholder="NRIC e.g 000101238888"	onblur="formatNRIC(this)" onfocus="removeDashes(this)">
+			<input type="text" id="nric-no" name="nric_no" class="form-control" placeholder="NRIC e.g 000101238888">
 		</div>
 
         <div class="input-group">

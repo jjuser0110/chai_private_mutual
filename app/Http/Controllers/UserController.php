@@ -171,9 +171,9 @@ class UserController extends Controller
             }
 
             $nric_no = str_replace('-', '', $request->nric_no);
-            if(strlen($nric_no) < 12){
-                throw new Exception('Invalid NRIC.');
-            }
+            // if(strlen($nric_no) < 12){
+            //     throw new Exception('Invalid NRIC.');
+            // }
 
             $timestamp = now()->timestamp;
             if ($request->hasFile('nric_front')) {
