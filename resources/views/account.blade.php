@@ -11,7 +11,7 @@
                 <div class="username">Hi, {{ Auth::user()->username ?? 'User' }}</div>
                 <div class="user-level">
                     <div class="icon">
-                        <img src="{{ asset('img/' . (Auth::user()->medal ?? 'Ordinary') . '.png') }}">
+                        <img src="{{ asset('img/medal/' . (Auth::user()->medal ?? 'Ordinary') . '.png') }}">
                     </div>
                     <div class="label">{{Auth::user()->medal??"Ordinary"}}</div>
                 </div>
