@@ -11,9 +11,9 @@
                 <div class="username">Hi, {{ Auth::user()->username ?? 'User' }}</div>
                 <div class="user-level">
                     <div class="icon">
-                        <img src="https://api.privatemutualhlg.com/storage/14/vip-ordinary.png" alt="ORDINARY">
+                        <img src="{{ asset('img/' . (Auth::user()->medal ?? 'Ordinary').'.png') }}" alt="ORDINARY">
                     </div>
-                    <div class="label">Ordinary</div>
+                    <div class="label">{{Auth::user()->medal??"Ordinary"}}</div>
                 </div>
                 @if(Auth::user()->setup == 0 || Auth::user()->setup == 4)
                 <div id="profile-verify-label" class="info" onclick="window.location.href='{{ route('setup') }}'">
