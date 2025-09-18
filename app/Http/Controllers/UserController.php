@@ -87,31 +87,60 @@ class UserController extends Controller
         }
     }
 
-    public function submit_login(Request $request){
-        try{
+    public function submit_login(Request $request)
+    {
+        try {
             $credentials = $request->validate([
                 'username' => ['required', 'string'],
                 'password' => ['required', 'string'],
             ]);
-        
+
             // Attempt login
             if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Login successful.',
-                ]);
-            }
-            else{
-                throw new Exception('Invalid credential');
-            }
+                $user = Auth::user();
 
-            throw new Exception($this->error_message());    
-        }
-        catch(Exception $e){
-            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+                if ($user->is_active == 1) {
+                    $request->session()->regenerate();
+                    $user->update(['attempt' => 0]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Login successful.',
+                    ]);
+                } else {
+                    Auth::logout();
+                    throw new Exception('Your account has been locked. Please contact support.');
+                }
+            } else {
+                $user = User::where('username', $request->username)->first();
+
+                if ($user) {
+                    if ($user->is_active == 1) {
+                        $user->update(['attempt' => $user->attempt + 1]);
+
+                        $remaining = 3 - $user->attempt;
+
+                        if ($remaining <= 0) {
+                            $user->update(['is_active' => 0]);
+                            throw new Exception('Your account has been locked due to multiple failed login attempts. Please contact support.');
+                        } else {
+                            throw new Exception("Invalid credentials. You have {$remaining} attempt(s) remaining.");
+                        }
+                    } else {
+                        throw new Exception('Your account has been locked. Please contact support.');
+                    }
+                }
+
+                throw new Exception('Invalid credentials.');
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
+
 
     public function setup()
     {
@@ -171,9 +200,9 @@ class UserController extends Controller
             }
 
             $nric_no = str_replace('-', '', $request->nric_no);
-            if(strlen($nric_no) < 12){
-                throw new Exception('Invalid NRIC.');
-            }
+            // if(strlen($nric_no) < 12){
+            //     throw new Exception('Invalid NRIC.');
+            // }
 
             $timestamp = now()->timestamp;
             if ($request->hasFile('nric_front')) {

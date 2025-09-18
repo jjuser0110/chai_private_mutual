@@ -183,6 +183,9 @@ class ProjectController extends Controller
             }
 
             $credit_before = Auth::user()->available_fund;
+            if($credit_before<$amount){
+                throw new Exception('Wallet not enough.');
+            }
             if($product->product_type == 'booking'){
                 $booking_record = Booking::create([
                     'user_id'=>Auth::user()->id,

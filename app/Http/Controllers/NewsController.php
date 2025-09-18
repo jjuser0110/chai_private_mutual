@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Product;
+use App\Models\Article;
 use Carbon\Carbon;
 use Exception;
 
@@ -14,7 +14,7 @@ class NewsController extends Controller
 {
     public function news()
     {
-        $news = Product::all();
+        $news = Article::where('is_active',1)->orderBy('arrangement','ASC')->get();
         if (request()->ajax()) {
             $view = view('news.list', compact('news'))->renderSections();
             return response()->json([
@@ -29,7 +29,7 @@ class NewsController extends Controller
     public function single(Request $request)
     {
         if(isset($request->id)){
-            $news = Product::where('id',$request->id)->first();
+            $news = Article::where('id',$request->id)->first();
         }
 
         if (request()->ajax()) {

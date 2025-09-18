@@ -18,10 +18,12 @@
     <div id="news">  
     @foreach($news as $n)
     <div class="news" onclick="loadPage('{{ route('single_news', ['id'=>$n->id]) }}')">
-        <div class="news-image-wrapper" style="{{ $n->image_path ? 'background-image:url('.$n->image_path.')' : 'background:black' }}"></div>
+        <div class="news-image-wrapper"
+            style="background-image: {{ optional($n->last_file)->file_path ? 'url("' . env('BACKEND_URL') . '/storage/' . optional($n->last_file)->file_path . '")' : 'black' }};">
+        </div>
         <div class="news-info">
             <h4>{{ $n->title ?? 'The title is here' }}</h4>
-            <p>{{ isset($n->created_at) ? explode(' ', $n->created_at)[0] : '-' }}</p>
+            <p>{{ isset($n->article_date) ? explode(' ', $n->article_date)[0] : '-' }}</p>
         </div>
     </div>
     @endforeach
