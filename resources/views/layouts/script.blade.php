@@ -170,6 +170,130 @@
         LiveChatWidget.call('maximize');
         return false;
     }
+
+	window.swiperInstances = window.swiperInstances || {};
+
+	const swiperConfigs = {
+		'join-banner': {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			slidesPerView: 1,
+			spaceBetween: 2,
+		},
+		'home-banner': {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			slidesPerView: 1,
+			spaceBetween: 2,
+		},
+
+		'swiper-notice': {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			},
+			slidesPerView: 1,
+			spaceBetween: 2,
+		},
+
+		'single-product-swiper': {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			slidesPerView: 1,
+			spaceBetween: 2,
+		},
+
+		'shop-banner': {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+			slidesPerView: 1,
+			spaceBetween: 2,
+		}
+	};
+
+	function destroyAllSwipers() {
+		for (let key in window.swiperInstances) {
+			if (window.swiperInstances[key] && typeof window.swiperInstances[key].destroy === 'function') {
+				try {
+					window.swiperInstances[key].destroy(true, true);
+				} catch (e) {
+					console.log('Error destroying swiper:', e);
+				}
+				delete window.swiperInstances[key];
+			}
+		}
+	}
+
+	function initializeAllSwipers() {
+		destroyAllSwipers();
+		setTimeout(() => {
+			for (let selector in swiperConfigs) {
+				const element = document.querySelector('#' + selector);
+				if (element) {
+					let config = JSON.parse(JSON.stringify(swiperConfigs[selector]));
+					if (config.pagination && config.pagination.el) {
+						const paginationEl = element.querySelector('.swiper-pagination');
+						if (paginationEl) {
+							config.pagination.el = paginationEl;
+						} else {
+							delete config.pagination;
+						}
+					}
+					
+					if (config.navigation) {
+						const nextEl = element.querySelector('.swiper-button-next');
+						const prevEl = element.querySelector('.swiper-button-prev');
+						
+						if (nextEl && prevEl) {
+							config.navigation.nextEl = nextEl;
+							config.navigation.prevEl = prevEl;
+						} else {
+							delete config.navigation;
+						}
+					}
+					
+					const slides = element.querySelectorAll('.swiper-slide');
+					if (slides.length > 0) {
+						window.swiperInstances[selector] = new Swiper(element, config);
+						if (config.autoplay && window.swiperInstances[selector].autoplay) {
+							window.swiperInstances[selector].autoplay.start();
+						}
+					} else {
+						console.log(`Swiper ${selector} found but no slides detected`);
+					}
+				}
+			}
+		}, 200);
+	}
 </script>
 <script>
     window.__lc = window.__lc || {};

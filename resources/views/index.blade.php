@@ -82,29 +82,7 @@
 @endsection
 @section('custom')
 <script>
-    new Swiper('#home-banner', {
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        slidesPerView: 1,
-        spaceBetween: 2,
-    });
-
-    new Swiper('#swiper-notice', {
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        slidesPerView: 1,
-        spaceBetween: 2,
-    });
+    initializeAllSwipers();
     $('.menu-item').removeClass('active');
     $('#home-icon').addClass('active');
 </script>

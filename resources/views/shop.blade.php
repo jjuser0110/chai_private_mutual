@@ -58,20 +58,7 @@
 @endsection
 @section('custom')
 <script>
-    var swiper = new Swiper('#shop-banner', {
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        slidesPerView: 1,
-        spaceBetween: 2,
-    });
-
+    initializeAllSwipers();
     $('.menu-item').removeClass('active');
     $('#shop-icon').addClass('active');
 </script>
