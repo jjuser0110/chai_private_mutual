@@ -479,7 +479,8 @@ class UserController extends Controller
 
     public function submit_withdraw(Request $request)
     {
-        DB::beginTransaction();
+        $user = Auth::user();
+        // DB::beginTransaction();
         try{
             if(!isset($request->amount) || !is_numeric($request->amount)){
                 throw new Exception('Invalid withdraw amount.');
@@ -494,13 +495,24 @@ class UserController extends Controller
             }
 
             if(!isset($request->fund_password) || $request->fund_password != Auth::user()->fund_password){
-                throw new Exception('Invalid fund password.'); 
+                $user->update(['fund_attempt'=>$user->fund_attempt + 1]);
+
+                $remaining = 3 - $user->fund_attempt;
+                // dd($user->fund_attempt);
+                if ($remaining <= 0) {
+                    $user->update(['is_active' => 0]);
+                    Auth::logout();
+                    return response()->json(['success'=>false,'message'=>'Your account has been locked due to multiple failed fund password attempts. Please contact support.','redirect'=>route('login')]);
+                } else {
+                    throw new Exception("Invalid fund password. You have {$remaining} attempt(s) remaining.");
+                }
             }
 
             $bank = UserBank::where('id',$request->bank)->where('user_id',Auth::user()->id)->first();
             if(!isset($bank)){
                 throw new Exception('Invalid bank account.');
             }
+            
             
             Withdraw::create([
                 'user_id'=>Auth::user()->id,
@@ -509,12 +521,12 @@ class UserController extends Controller
             ]);
 
             Auth::user()->decrement('available_fund', $request->amount);
-            DB::commit();
+            // DB::commit();
             return response()->json(['success'=>true,'message'=>'Withdraw has been submited.']);
             throw new Exception($this->error_message());
         }
         catch(Exception $e){
-            DB::rollback();
+            // DB::rollback();
             return response()->json(['success'=>false,'message'=>$e->getMessage()]);
         }
     }

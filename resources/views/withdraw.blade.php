@@ -69,7 +69,13 @@
 					infoModal(response.message, "{{ route('withdraw_record') }}")
 				}
 				else{
-					showToast('error','Failed',response.message)
+					showToast('error','Failed',response.message);
+                    if (response.redirect) {
+                        setTimeout(function () {
+                            window.location.href = response.redirect;
+                        }, 2000); // 2 seconds
+                    }
+
 				}
 			},
 			error: function() {
