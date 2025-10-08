@@ -18,12 +18,14 @@
 		</div>
 		<div class="input-group">
 			<span class="input-group-text"><i class="ri-lock-line"></i></span>
+			<img class="cus-toggle-password" src="http://pm.test/img/grey-eyeoff.png" alt="Toggle" />
 			<input type="password" id="password" name="password" class="form-control" placeholder="Password">
 		</div>
 		<div class="login-tips"><span>* Eight or more characters, including upper and lowercase letters and at least one number.</span></div>
 		<div class="login-tips"><span>* Never share your account password, verification codes, or account security details with anyone.</span></div>
 		<div class="input-group">
 			<span class="input-group-text"><i class="ri-lock-line"></i></span>
+			<img class="cus-toggle-password" src="http://pm.test/img/grey-eyeoff.png" alt="Toggle" />
 			<input type="password" id="passwordConfirmation" name="password_confirmation" class="form-control" placeholder="Confirm Password">
 		</div>
 		<div class="input-group">
@@ -71,5 +73,18 @@
 			}
 		});
 	});
+
+	document.querySelectorAll('.cus-toggle-password').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const input = toggle.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.src = "{{ asset('img/grey-eye.png') }}";
+            } else {
+                input.type = 'password';
+                toggle.src = "{{ asset('img/grey-eyeoff.png') }}";
+            }
+        });
+    });
 </script>
 @endsection

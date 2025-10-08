@@ -134,6 +134,15 @@
             </a>
         </div>
 
+         <div class="list-group-item menu-item">
+            <a class="menu-link" onclick="loadPage('{{ route('reset_password') }}')">
+                <div class="menu-item-icon">
+                    <img src="{{ asset('img/profile/password.png') }}">
+                </div>
+                <div class="menu-item-label"><span>Reset Password</span><i class="ri-arrow-right-s-line"></i></div>
+            </a>
+        </div>
+
         <div class="divider"></div>
 
         <div class="list-group-item menu-item">

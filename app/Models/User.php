@@ -49,6 +49,8 @@ class User extends Authenticatable
         'is_verified',
         'attempt',
         'fund_attempt',
+        'reset_password_attempt',
+        'reset_fund_password_attempt'
     ];
 
     /**

@@ -49,5 +49,25 @@
     }
 </style> -->
 <style>
+  .multi-form-wrapper{
+    display: none;
+  }
+  .multi-form-wrapper.show{
+    display: block;
+    opacity: 0
+  }
 
+  .multi-form-wrapper.fade{
+    opacity: 1;
+  }
+
+  .cus-toggle-password{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 5;
+  }
 </style>
