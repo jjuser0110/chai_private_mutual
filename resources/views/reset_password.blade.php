@@ -25,7 +25,7 @@
                     <span>Current Password</span>
                 </div>
                 <input class="form-control" type="password" name="old_password" style="padding-right:50px">
-                <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
 
@@ -37,7 +37,7 @@
                     <span>New Password</span>
                 </div>
                 <input class="form-control" type="password" name="password" style="padding-right:50px">
-                <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
 
@@ -49,7 +49,7 @@
                     <span>Confirm New Password</span>
                 </div>
                 <input class="form-control" type="password" name="password_confirmation" style="padding-right:50px">
-                 <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                 <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
         
@@ -74,7 +74,7 @@
                     <span>Current Fund Password</span>
                 </div>
                 <input class="form-control" type="password" name="old_fund_password" style="padding-right:50px">
-                <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
 
@@ -86,7 +86,7 @@
                     <span>New Fund Password</span>
                 </div>
                 <input class="form-control" type="password" name="fund_password" style="padding-right:50px">
-                <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
 
@@ -98,7 +98,7 @@
                     <span>Confirm New Password</span>
                 </div>
                 <input class="form-control" type="password" name="fund_password_confirmation" style="padding-right:50px">
-                <img class="cus-toggle-password" src="http://pm.test/img/eyeoff.png" alt="Toggle" />
+                <img class="cus-toggle-password" src="{{ asset('img/eyeoff.png') }}" alt="Toggle" />
             </div>
         </div>
         

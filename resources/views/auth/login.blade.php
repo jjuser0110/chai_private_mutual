@@ -27,7 +27,7 @@
 			<div id="text-username">Username: null</div>
 			<div class="input-group">
 				<span class="input-group-text"><i class="ri-lock-line"></i></span>
-				 <img class="cus-toggle-password" src="http://pm.test/img/grey-eyeoff.png" alt="Toggle" />
+				 <img class="cus-toggle-password" src="{{ asset('img/grey-eyeoff.png') }}" alt="Toggle" />
 				<input type="password" id="password" name="password" class="form-control" placeholder="Please enter your Password">
 				  
 			</div>
