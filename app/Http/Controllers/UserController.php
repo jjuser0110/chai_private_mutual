@@ -170,8 +170,8 @@ class UserController extends Controller
         try{
             DB::beginTransaction();
             $validator = Validator::make($request->all(),[
-                'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
-                'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
+                'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:20000',
+                'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:20000',
                 'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 'email' => 'required|email',
                 'contact_no' => 'required|numeric',
