@@ -107,6 +107,10 @@
 <script>
     $('#form-investment').off('submit').on('submit', function(e) {
 		e.preventDefault();
+        
+		@if(Auth::user()->invalid_fund > 0)
+			showToast('error','Failed',"You unable to perform this action. please contact customer services!")
+		@else
 		showLoading();
 		var formData = new FormData(this);
 		var btn = $(this).find('button[type="submit"]');
@@ -136,6 +140,7 @@
 				hideLoading();
 			}
 		});
+        @endif
 	});
 
     document.querySelectorAll('.countdown-timer').forEach(function (el) {

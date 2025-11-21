@@ -29,12 +29,16 @@
         </div>
         <div class="account-funds">
             <div class="label">Available Funds</div>
-            <div class="value">{{ number_format((Auth::user()->available_fund ?? 0),2,'.',',') }}</div>
+            <div class="value">{{ number_format((Auth::user()->new_available_fund ?? 0),2,'.',',') }}</div>
         </div>
         <div class="account-money-list">
             <div class="item">
                 <div class="label">Total Money</div>
                 <div class="value">{{ Auth::user()->total_money ?? 0 }}</div>
+            </div>
+            <div class="item">
+                <div class="label">Invalid Funds</div>
+                <div class="value">{{ Auth::user()->invalid_fund ?? 0 }}</div>
             </div>
             <div class="item">
                 <div class="label">Unavailable Funds</div>
