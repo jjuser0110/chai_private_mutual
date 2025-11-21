@@ -35,8 +35,6 @@ class User extends Authenticatable
         'invitation_code',
         'medal',
         'available_fund',
-        'total_money',
-        'unavailable_fund',
         'income',
         'credit_score',
         'shop_point',
@@ -49,6 +47,9 @@ class User extends Authenticatable
         'is_verified',
         'attempt',
         'fund_attempt',
+        'reset_password_attempt',
+        'reset_fund_password_attempt',
+        'invalid_fund'
     ];
 
     /**
@@ -100,6 +101,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\MoneyRecord')->orderBy('created_at','DESC');
     }
 
+    public function shop_points()
+    {
+        return $this->hasMany('App\Models\UserShopPointHistory')->orderBy('created_at','DESC');
+    }
+
+    public function withdraws()
+    {
+        return $this->hasMany('App\Models\Withdraw')->orderBy('created_at','DESC');
+    }
+
     public function bookings()
     {
         return $this->hasMany('App\Models\Booking')->orderBy('created_at','DESC');
@@ -128,6 +139,11 @@ class User extends Authenticatable
     public function getUnavailableFundAttribute()
     {
         return round($this->pending_bookings()->sum('total_payment')+$this->pending_join_records()->sum('investment_amount')+$this->pending_withdraws()->sum('amount'),2);
+    }
+
+    public function getNewAvailableFundAttribute()
+    {
+        return round($this->available_fund-$this->invalid_fund,2);
     }
 
     public function getTotalMoneyAttribute()
