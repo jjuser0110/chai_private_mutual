@@ -170,8 +170,8 @@ class UserController extends Controller
         try{
             DB::beginTransaction();
             $validator = Validator::make($request->all(),[
-                'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
-                'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
+                'nric_front' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:20000',
+                'nric_back' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:20000',
                 'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 'email' => 'required|email',
                 'contact_no' => 'required|numeric',
@@ -490,6 +490,10 @@ class UserController extends Controller
                 throw new Exception('Insufficient amount.');
             }
 
+            if(Auth::user()->credit_score < 40){
+                throw new Exception('You need a credit score of at least 40 to make a withdrawal.');
+            }
+
             if(!isset($request->bank)){
                 throw new Exception('Please select you bank account.');
             }
@@ -682,5 +686,103 @@ class UserController extends Controller
         session()->invalidate();
         session()->regenerateToken();
         return redirect()->route('login');
+    }
+
+    public function reset_password()
+    {
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'content' => view('reset_password')->renderSections()['content'],
+                'script' => view('reset_password')->renderSections()['custom'] ?? '',
+            ]);
+        }
+        return view('reset_password');
+    }
+
+    public function submit_reset_password(Request $request)
+    {
+        try{
+            $user = Auth::user();
+            $banned = 0;
+            if (!Hash::check($request->old_password, $user->password)) {
+                 $user->increment('reset_password_attempt');
+                if($user->reset_password_attempt >= 3){
+                    $user->update(['is_active'=>0]);
+                    Auth::logout();
+                    $banned = 1;
+                    throw new Exception('Your account has been temporary locked.');
+                }
+                $count = 3 - $user->reset_password_attempt;
+                throw new Exception('The current password is incorrect, '.$count.' more attempt(s) left.');
+            } 
+
+            $validator = Validator::make($request->all(), [
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'confirmed',
+                    'regex:/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/'
+                ],
+            ], [
+                'password.min' => 'Password must be at least 8 characters.',
+                'password.regex' => 'Password must contain at least one letter and one number.',
+                'password.confirmed' => 'Passwords do not match.',
+            ]);
+    
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first());
+            }
+
+            $user->update(['password'=>Hash::make($request->password),'reset_password_attempt'=>0]);
+            return response()->json(['success'=>true,'message'=>'Password has been reset.']);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage(),'banned'=>$banned]);
+        }
+    }
+
+     public function submit_reset_fund_password(Request $request)
+    {
+        try{
+            $user = Auth::user();
+            $banned = 0;
+            if ($request->old_fund_password !== $user->fund_password){
+                $user->increment('reset_fund_password_attempt');
+                if($user->reset_fund_password_attempt >= 3){
+                    $user->update(['is_active'=>0]);
+                    Auth::logout();
+                    $banned = 1;
+                    throw new Exception('Your account has been temporary locked.');
+                }
+                $count = 3 - $user->reset_fund_password_attempt;
+                throw new Exception('The current fund password is incorrect, '.$count.' more attempt(s) left.');
+            } 
+
+            $validator = Validator::make($request->all(), [
+                'fund_password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'confirmed',
+                    'regex:/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/'
+                ],
+            ], [
+                'fund_password.min' => 'Password must be at least 8 characters.',
+                'fund_password.regex' => 'Password must contain at least one letter and one number.',
+                'fund_password.confirmed' => 'Passwords do not match.',
+            ]);
+    
+            if ($validator->fails()) {
+                throw new Exception($validator->errors()->first());
+            }
+
+            $user->update(['fund_password'=>$request->fund_password,'reset_fund_password_attempt'=>0]);
+            return response()->json(['success'=>true,'message'=>'Fund password has been reset.']);
+        }
+        catch(Exception $e){
+            return response()->json(['success'=>false,'message'=>$e->getMessage(),'banned'=>$banned]);
+        }
     }
 }

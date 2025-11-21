@@ -27,7 +27,9 @@
 			<div id="text-username">Username: null</div>
 			<div class="input-group">
 				<span class="input-group-text"><i class="ri-lock-line"></i></span>
+				 <img class="cus-toggle-password" src="{{ asset('img/grey-eyeoff.png') }}" alt="Toggle" />
 				<input type="password" id="password" name="password" class="form-control" placeholder="Please enter your Password">
+				  
 			</div>
 			<div class="btn-wrapper">
 				<button id="btn-previous" class="btn btn-md btn-primary" type="button">Previous</button>
@@ -90,5 +92,18 @@
 			}
 		})
 	});
+
+	 document.querySelectorAll('.cus-toggle-password').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const input = toggle.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.src = "{{ asset('img/grey-eye.png') }}";
+            } else {
+                input.type = 'password';
+                toggle.src = "{{ asset('img/grey-eyeoff.png') }}";
+            }
+        });
+    });
 </script>
 @endsection
