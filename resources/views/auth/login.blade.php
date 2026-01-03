@@ -6,9 +6,9 @@
 		<a class="customer-service" href="#" onclick="livechat();return false;" id="livechatID">
 			<i class="ri-customer-service-line"></i>
 		</a>
-		<div class="close-wrapper cursor-pointer" onclick="loadPage('{{ route('index') }}')">
+		<!-- <div class="close-wrapper cursor-pointer" onclick="loadPage('{{ route('index') }}')">
 			<i class="ri-close-circle-line"></i>
-		</div>
+		</div> -->
 	</div>
 	<div class="logo">
 		<img src="{{ asset('img/logo.png') }}" alt="Hong Leong Bank Logo">

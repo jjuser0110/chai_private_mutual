@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
+    Route::get('/', [App\Http\Controllers\Controller::class, 'index'])->middleware('auth');
 //Route::middleware(['ForceSetup'])->group(function() {
     Auth::routes();
-    Route::get('/home', [App\Http\Controllers\Controller::class, 'index'])->name('index');
+    Route::get('/home', [App\Http\Controllers\Controller::class, 'index'])->name('index')->middleware('auth');
     Route::get('/join', [App\Http\Controllers\Controller::class, 'join'])->name('join');
     Route::get('/shop', [App\Http\Controllers\ShopController::class, 'shop'])->name('shop');
     Route::get('/product/{id}', [App\Http\Controllers\ShopController::class, 'view'])->name('single_product');
