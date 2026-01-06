@@ -10,10 +10,10 @@
 			<i class="ri-close-circle-line"></i>
 		</div> -->
 	</div>
-	<div class="logo">
-		<img src="{{ asset('img/logo.png') }}" alt="Hong Leong Bank Logo">
+	<div class="logo" style="text-align: center;margin-top:200px">
+		 <h2>LOGIN</h2>
 	</div>
-	<form class="form-login"  id="form-login">
+	<form class="form-login"  id="form-login" >
 		<div id="login-step-1">
 			<div class="input-group">
 				<span class="input-group-text"><i class="ri-mail-line"></i></span>

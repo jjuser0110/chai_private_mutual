@@ -8,8 +8,8 @@
 			<i class="ri-close-circle-line"></i>
 		</div>
 	</div>
-	<div class="logo">
-		<img src="{{ asset('img/logo.png') }}" alt="Hong Leong Bank Logo">
+	<div class="logo" style="text-align: center;margin-top:200px">
+		 <h2>REGISTER</h2>
 	</div>
 	<form class="form-register" id="form-register">
 		<div class="input-group">

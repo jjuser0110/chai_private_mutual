@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('css/style2.css')}}">
 <link rel="stylesheet" href="{{asset('css/modal3.css')}}">
 <!--
 <link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">
