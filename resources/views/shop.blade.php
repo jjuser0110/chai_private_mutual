@@ -41,7 +41,7 @@
             <div class="product-item" onclick="loadPage('{{ route('single_product', ['id'=>$item->id]) }}')">
                 <div class="product-card">
                     <div class="thumbnail-wrapper">
-                        <div class="thumbnail" style="background-image:url('{{ env('BACKEND_URL') }}/storage/{{ $item->thumbnail->file_path }}')"></div>
+                        <div class="thumbnail" style="background-image:url('{{ env('BACKEND_URL') }}/storage/{{ $item->thumbnail()->file_path?? 'no-image.png' }}')"></div>
                     </div>
                     <div class="product-info">
                         <div class="product-title">{{ $item->item_name }}</div>
